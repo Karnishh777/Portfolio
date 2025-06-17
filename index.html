@@ -6,19 +6,6 @@
   <title>Karnishh Videography</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-color: #0f0f0f;
-      --text-color: #e0e0e0;
-      --accent-color: #a86c2f;
-      --nav-bg: #121212;
-    }
-
-    body.light-theme {
-      --bg-color: #ffffff;
-      --text-color: #121212;
-      --nav-bg: #f0f0f0;
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -26,67 +13,57 @@
     }
     body {
       font-family: 'Montserrat', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
+      background: #0f0f0f;
+      color: #e0e0e0;
       transition: background 0.3s, color 0.3s;
     }
+    body.light {
+      background: #ffffff;
+      color: #1a1a1a;
+    }
     header {
-      background: var(--nav-bg);
+      background: #1c1c1c;
       text-align: center;
       padding: 2rem;
     }
+    body.light header {
+      background: #f5f5f5;
+    }
     header img {
-      max-height: 300px;
+      max-height: 200px;
       margin-bottom: 2rem;
     }
     header h1 {
-      font-size: 3rem;
-      color: var(--accent-color);
-      margin-bottom: 1rem;
-    }
-    .cta-button {
-      background: var(--accent-color);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 30px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .cta-button:hover {
-      background: #8a5426;
+      font-size: 2.5rem;
+      color: #a86c2f;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
     }
     nav {
-      background: var(--nav-bg);
+      background: #121212;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
+      gap: 1rem;
       padding: 1rem;
       position: sticky;
       top: 0;
-      z-index: 999;
+      z-index: 1000;
+    }
+    body.light nav {
+      background: #f0f0f0;
     }
     nav a {
-      color: var(--text-color);
+      color: #e0e0e0;
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s;
     }
-    nav a:hover {
-      color: var(--accent-color);
+    body.light nav a {
+      color: #333;
     }
-    .theme-toggle {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      background: none;
-      border: 2px solid var(--accent-color);
-      color: var(--accent-color);
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
+    nav a:hover {
+      color: #a86c2f;
     }
     section {
       padding: 2rem 1rem;
@@ -100,7 +77,7 @@
     }
     .reel-container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1rem;
     }
     iframe {
@@ -110,36 +87,49 @@
       border-radius: 10px;
     }
     footer {
-      background: var(--nav-bg);
+      background: #121212;
       color: #999;
       text-align: center;
       padding: 1rem;
     }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    input, textarea {
-      padding: 0.75rem;
-      border-radius: 5px;
+    .theme-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 0.5rem 1rem;
+      background: #a86c2f;
+      color: white;
       border: none;
-      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .go-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 0.5rem 1rem;
+      background: #a86c2f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
     }
     @media (max-width: 768px) {
-      .reel-container {
-        grid-template-columns: 1fr;
+      nav {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <button class="theme-toggle" onclick="document.body.classList.toggle('light-theme')">Toggle Theme</button>
+  <button class="theme-toggle" onclick="document.body.classList.toggle('light')">Toggle Theme</button>
+  <button id="goTopBtn" class="go-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Go to Top</button>
+
   <header>
     <img src="https://static.vecteezy.com/system/resources/previews/019/514/630/non_2x/letter-k-logo-design-for-business-and-company-identity-with-luxury-concept-free-vector.jpg" alt="Karnishh Logo">
     <h1>Karnishh Videography</h1>
     <p>Crafting Reels That Resonate</p>
-    <button class="cta-button" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Book a Session</button>
   </header>
 
   <nav>
@@ -151,28 +141,25 @@
   </nav>
 
   <section id="dashboard">
-    <h2>Welcome</h2>
-    <p>Step into a world of cinematic storytelling and modern video editing. Explore my portfolio and discover how I transform vision into visual art.</p>
+    <h2>Welcome to Karnishh Videography</h2>
+    <p>This is your dashboard. Explore my creative world—from storytelling mastery to advanced AI-assisted edits.</p>
   </section>
 
   <section id="description">
     <h2>About Me</h2>
-    <p>I’m Karnishh, a passionate visual storyteller specializing in impactful short-form content. With expertise in cutting-edge tools and techniques, I help creators and brands build a standout digital presence.</p>
+    <p>I’m Karnishh, a visionary reel editor. I specialize in cinematic storytelling, advanced AI tools, and zero-copyright content. My edits are sharp, fast-paced, and built to go viral.</p>
     <ul>
       <li>Davinci Resolve</li>
-      <li>Premiere Pro</li>
-      <li>After effects</li>
       <li>Storytelling</li>
       <li>Usage of AI</li>
       <li>Zero Copyrights</li>
       <li>Color Grading</li>
       <li>Editing</li>
-      <li>Music</li>
     </ul>
   </section>
 
   <section id="works">
-    <h2>Featured Works</h2>
+    <h2>My Work</h2>
     <div class="reel-container">
       <iframe src="https://www.instagram.com/reel/DJEmc-EyI2Z/embed" allowfullscreen></iframe>
       <iframe src="https://www.instagram.com/reel/DIx1ZkUSza4/embed" allowfullscreen></iframe>
@@ -182,37 +169,52 @@
   </section>
 
   <section id="pricing">
-    <h2>Packages</h2>
-    <p>Tailored video editing services for creators, influencers, and businesses seeking professional-grade visuals and fast turnaround.</p>
+    <h2>Pricing & Packages</h2>
+    <p>I offer premium reel editing services tailored for creators, influencers, and brands who want to stand out. Each video is edited with precision, using top tools and zero-copyright resources. Fast delivery and AI-optimized flow come standard.</p>
     <ul>
       <li>Basic Edit – ₹799</li>
       <li>Advanced Edit with AI – ₹999</li>
       <li>Monthly Creator Pack – ₹5999 (8 reels)</li>
-      <li>Custom Projects – Contact for quote</li>
+      <li>For custom plans contact us</li>
     </ul>
   </section>
 
-  <section>
-    <h2>Client Testimonials</h2>
-    <p>"Karnishh turned our raw footage into a viral masterpiece! Highly recommended." – Sujith</p>
-    <p>"A true professional. The edits were crisp, engaging, and delivered on time." – Karthick</p>
-  </section>
-
   <section id="contact">
-    <h2>Get In Touch</h2>
-    <p>Feel free to reach out for bookings or custom quotes.</p>
+    <h2>Contact Me</h2>
     <p>Email: <a href="mailto:karnishhvjs10b@gmail.com">karnishhvjs10b@gmail.com</a></p>
     <p>Phone: <a href="tel:+919342603979">+91 93426 03979</a></p>
-    <form>
-      <input type="text" placeholder="Your Name" required />
-      <input type="email" placeholder="Your Email" required />
-      <textarea rows="4" placeholder="Your Message"></textarea>
-      <button class="cta-button" type="submit">Send</button>
+    <form onsubmit="return redirectToGmail();">
+      <label>Name:</label><br>
+      <input type="text" id="userName" placeholder="Your Name" required><br>
+      <label>Message:</label><br>
+      <textarea id="userMessage" placeholder="Your message" required></textarea><br>
+      <button type="submit">Book a Call</button>
     </form>
   </section>
 
   <footer>
     <p>&copy; 2025 Karnishh Videography</p>
   </footer>
+
+  <script>
+    const goTopBtn = document.getElementById('goTopBtn');
+    window.onscroll = () => {
+      if (window.scrollY > 200) {
+        goTopBtn.style.display = 'block';
+      } else {
+        goTopBtn.style.display = 'none';
+      }
+    };
+
+    function redirectToGmail() {
+      const name = document.getElementById('userName').value;
+      const message = document.getElementById('userMessage').value;
+      const subject = encodeURIComponent("Call Request from " + name);
+      const body = encodeURIComponent(message);
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
+      window.open(gmailUrl, '_blank');
+      return false;
+    }
+  </script>
 </body>
 </html>
