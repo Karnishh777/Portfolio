@@ -4,12 +4,162 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Karnishh Videography</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+      color: #e0e0e0;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.light {
+      background: #ffffff;
+      color: #1a1a1a;
+    }
+    header {
+      background: linear-gradient(135deg, #1c1c1c, #2e2e2e);
+      text-align: center;
+      padding: 2rem;
+      animation: fadeSlide 1s ease-in-out;
+    }
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(-30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    body.light header {
+      background: #f5f5f5;
+    }
+    header img {
+      max-height: 200px;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 3rem;
+      color: #ff9800;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    nav {
+      background: #121212;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      animation: slideDown 1s ease-in;
+    }
+    @keyframes slideDown {
+      0% { transform: translateY(-100%); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    nav a {
+      color: #e0e0e0;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s, transform 0.2s;
+    }
+    nav a:hover {
+      color: #ff9800;
+      transform: scale(1.1);
+    }
+    section {
+      padding: 2rem 1rem;
+      max-width: 900px;
+      margin: auto;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reel-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      animation: fadeIn 1s ease-in;
+    }
+    iframe {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    footer {
+      background: #121212;
+      color: #999;
+      text-align: center;
+      padding: 1rem;
+    }
+    .theme-toggle, .go-top {
+      position: fixed;
+      padding: 0.5rem 1rem;
+      background: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      z-index: 1001;
+    }
+    .theme-toggle {
+      top: 10px;
+      right: 10px;
+    }
+    .go-top {
+      bottom: 20px;
+      right: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+    }
+    .go-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .theme-toggle:hover, .go-top:hover {
+      transform: scale(1.05);
+    }
+    form {
+      margin-top: 1rem;
+    }
+    input, textarea, button[type="submit"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button[type="submit"] {
+      background: #ff9800;
+      color: white;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
-  <button id="goTopBtn" class="go-top" onclick="scrollToTop()">Go to Top</button>
+  <button class="theme-toggle" onclick="document.body.classList.toggle('light')">Toggle Theme</button>
+  <button id="goTopBtn" class="go-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Top</button>
 
   <header>
     <img src="https://static.vecteezy.com/system/resources/previews/019/514/630/non_2x/letter-k-logo-design-for-business-and-company-identity-with-luxury-concept-free-vector.jpg" alt="Karnishh Logo">
@@ -26,18 +176,19 @@
   </nav>
 
   <section id="dashboard">
-    <h2>Welcome</h2>
-    <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px;" loop autoplay></lottie-player>
-    <p>Explore creative storytelling with AI and cinematic editing.</p>
+    <h2>Welcome to Karnishh Videography</h2>
+    <img src="https://images.unsplash.com/photo-1612849319390-c6c9e8a57f73" alt="Editing Studio" style="width:100%; border-radius: 10px; margin: 1rem 0;">
+    <p>Explore my creative world—from storytelling mastery to AI-enhanced edits, made to dominate digital platforms.</p>
   </section>
 
   <section id="description">
     <h2>About Me</h2>
-    <p>I’m Karnishh, a reel editor using AI, Davinci Resolve, and creativity to deliver impactful reels.</p>
+    <img src="https://cdn-icons-png.flaticon.com/512/3215/3215535.png" alt="Video Editing Icon" style="width: 60px;">
+    <p>I’m Karnishh, a visionary reel editor. I specialize in cinematic storytelling, advanced AI tools, and zero-copyright content. My edits are sharp, fast-paced, and built to go viral.</p>
     <ul>
-      <li>Davinci Resolve</li>
+      <li><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/DaVinci_Resolve_17_logo.svg" alt="Davinci Logo" style="width:24px;vertical-align:middle;"> Davinci Resolve</li>
       <li>Storytelling</li>
-      <li>Usage of AI</li>
+      <li><img src="https://cdn-icons-png.flaticon.com/512/2965/2965567.png" alt="AI" style="width:24px;vertical-align:middle;"> Usage of AI</li>
       <li>Zero Copyrights</li>
       <li>Color Grading</li>
       <li>Editing</li>
@@ -56,21 +207,26 @@
 
   <section id="pricing">
     <h2>Pricing & Packages</h2>
-    <p>High-quality reel edits with AI-enhanced flow.</p>
+    <img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png" alt="Pricing Icon" style="width: 50px;">
+    <p>I offer premium reel editing services tailored for creators, influencers, and brands who want to stand out. Each video is edited with precision, using top tools and zero-copyright resources. Fast delivery and AI-optimized flow come standard.</p>
     <ul>
       <li>Basic Edit – ₹799</li>
       <li>Advanced Edit with AI – ₹999</li>
-      <li>Monthly Pack – ₹5999</li>
+      <li>Monthly Creator Pack – ₹5999 (8 reels)</li>
+      <li>For custom plans contact us</li>
     </ul>
   </section>
 
   <section id="contact">
     <h2>Contact Me</h2>
+    <img src="https://cdn-icons-png.flaticon.com/512/552/552486.png" alt="Contact Icon" style="width: 40px;">
     <p>Email: <a href="mailto:karnishhvjs10b@gmail.com">karnishhvjs10b@gmail.com</a></p>
     <p>Phone: <a href="tel:+919342603979">+91 93426 03979</a></p>
     <form onsubmit="return redirectToGmail();">
-      <input type="text" id="userName" placeholder="Your Name" required>
-      <textarea id="userMessage" placeholder="Your message" required></textarea>
+      <label>Name:</label><br>
+      <input type="text" id="userName" placeholder="Your Name" required><br>
+      <label>Message:</label><br>
+      <textarea id="userMessage" placeholder="Your message" required></textarea><br>
       <button type="submit">Book a Call</button>
     </form>
   </section>
@@ -79,6 +235,21 @@
     <p>&copy; 2025 Karnishh Videography</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const goTopBtn = document.getElementById('goTopBtn');
+    window.addEventListener('scroll', () => {
+      goTopBtn.classList.toggle('visible', window.scrollY > 200);
+    });
+
+    function redirectToGmail() {
+      const name = document.getElementById('userName').value;
+      const message = document.getElementById('userMessage').value;
+      const subject = encodeURIComponent("Call Request from " + name);
+      const body = encodeURIComponent(message);
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
+      window.open(gmailUrl, '_blank');
+      return false;
+    }
+  </script>
 </body>
 </html>
