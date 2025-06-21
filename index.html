@@ -24,9 +24,38 @@
       background-color: #020617;
       color: #e2e8f0;
       overflow-x: hidden;
-      cursor: none; /* Hide the default cursor */
+    }
+    .content-hidden {
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+    }
+
+    /* Device Selector Splash Screen */
+    #device-selector {
+        position: fixed;
+        inset: 0;
+        background-color: #020617;
+        z-index: 10001;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease-out;
+    }
+    #device-selector.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Custom cursor for desktop only */
+    body.desktop-cursor {
+        cursor: none;
     }
     .custom-cursor .cursor-dot {
+      display: none;
+    }
+    body.desktop-cursor .custom-cursor .cursor-dot {
+      display: block;
       width: var(--cursor-size);
       height: var(--cursor-size);
       background-color: var(--cursor-color);
@@ -40,6 +69,10 @@
       transition: transform 0.2s ease-out;
     }
     .custom-cursor .cursor-outline {
+      display: none;
+    }
+    body.desktop-cursor .custom-cursor .cursor-outline {
+      display: block;
       width: var(--cursor-outline-size);
       height: var(--cursor-outline-size);
       border: 2px solid var(--cursor-color);
@@ -60,6 +93,7 @@
     .custom-cursor.hovered .cursor-dot {
       transform: scale(0);
     }
+    
     @keyframes hero-glow {
       0% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.2), 0 0 80px rgba(192, 38, 211, 0.1); }
       50% { box-shadow: 0 0 60px rgba(6, 182, 212, 0.4), 0 0 120px rgba(192, 38, 211, 0.2); }
@@ -110,241 +144,315 @@
   </style>
 </head>
 <body class="bg-slate-900">
-  <div class="custom-cursor">
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+  <!-- DEVICE SELECTION SCREEN -->
+  <div id="device-selector">
+      <div class="text-center p-4">
+          <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Welcome</h1>
+          <p class="text-slate-400 mb-8">Please select your viewing experience.</p>
+          <div class="flex flex-col sm:flex-row gap-4">
+              <button id="desktop-btn" class="px-8 py-4 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105">Desktop / Laptop</button>
+              <button id="mobile-btn" class="px-8 py-4 bg-fuchsia-600 text-white font-bold rounded-full hover:bg-fuchsia-500 transition-all duration-300 transform hover:scale-105">Mobile / Tablet</button>
+          </div>
+      </div>
   </div>
 
-  <!-- HEADER & NAVIGATION -->
-  <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
-    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold text-white hover-target">Karnishh.</a>
-      <div class="space-x-8 hidden md:flex">
-        <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">About</a>
-        <a href="#showcase" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Showcase</a>
-        <a href="#services" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Services</a>
-        <a href="#process" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Process</a>
-      </div>
-      <a href="#contact" class="px-6 py-2 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
-        Contact Me
-      </a>
-    </nav>
-  </header>
+  <div id="main-content-wrapper" class="content-hidden">
+    <div class="custom-cursor">
+      <div class="cursor-dot"></div>
+      <div class="cursor-outline"></div>
+    </div>
 
-  <!-- MAIN CONTENT -->
-  <main>
-    <!-- HERO SECTION -->
-    <section id="home" class="h-screen min-h-[700px] w-full flex items-center justify-center text-center hero-bg relative overflow-hidden">
-      <div class="absolute inset-0 bg-grid-slate-800/20 [mask-image:linear-gradient(to_bottom,white_20%,transparent_70%)]"></div>
-      <div class="z-10 px-4">
-        <h1 class="text-5xl md:text-8xl font-bold text-white leading-tight tracking-tighter scroll-animate">
-          Editing Stories,<br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Frame by Frame.</span>
-        </h1>
-        <p class="text-slate-400 mt-6 max-w-2xl mx-auto text-lg md:text-xl scroll-animate" style="transition-delay: 200ms;">
-          I am Karnishh, a video editor who transforms raw footage into compelling narratives that captivate, engage, and inspire.
-        </p>
-        <div class="mt-10 scroll-animate" style="transition-delay: 400ms;">
-          <a href="#showcase" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-200 transition-all duration-300 transform hover:scale-105 hover-target">
-            View My Work
-          </a>
+    <!-- HEADER & NAVIGATION -->
+    <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+      <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-white hover-target">Karnishh.</a>
+        <div class="space-x-8 hidden md:flex">
+          <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">About</a>
+          <a href="#showcase" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Showcase</a>
+          <a href="#services" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Services</a>
+          <a href="#process" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Process</a>
         </div>
-      </div>
-    </section>
-
-    <!-- ABOUT SECTION -->
-    <section id="about" class="py-20 md:py-32">
-      <div class="container mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div class="scroll-animate">
-             <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">The Visionary<br>Behind the Edit.</h2>
-             <p class="text-slate-400 text-lg mb-6">
-               My name is Karnishh, and my passion is storytelling. I believe every clip has a purpose, every transition has a rhythm, and every color tells a story. With a meticulous eye for detail and a deep understanding of pacing, I don't just edit videos—I craft cinematic experiences. 
-             </p>
-             <p class="text-slate-400 text-lg">
-               From viral social media reels to polished brand stories, I leverage cutting-edge tools and AI-enhanced workflows to deliver content that not only looks stunning but also achieves its goals.
-             </p>
-          </div>
-          <div class="scroll-animate" style="transition-delay: 200ms;">
-            <div class="glassmorphism rounded-2xl p-8">
-              <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px; margin: auto;" loop autoplay></lottie-player>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SHOWCASE SECTION -->
-    <section id="showcase" class="py-20 md:py-32 bg-slate-900/50">
-      <div class="container mx-auto px-6 text-center">
-        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Recent Work</h2>
-        <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
-          A selection of projects that showcase my editing style and versatility.
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Reel Item 1 -->
-            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 100ms;">
-                <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/CqZQX0_g9vA/embed" allowfullscreen></iframe>
-                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                    <h3 class="text-white text-2xl font-bold text-center">Project Title One</h3>
-                </div>
-            </div>
-            <!-- Reel Item 2 -->
-            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 200ms;">
-                <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/Cr_qZ0_g5F4/embed" allowfullscreen></iframe>
-                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                    <h3 class="text-white text-2xl font-bold text-center">Project Title Two</h3>
-                </div>
-            </div>
-            <!-- Reel Item 3 (Placeholder) -->
-            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl bg-slate-800 scroll-animate" style="transition-delay: 300ms;">
-                 <div class="w-full h-full flex items-center justify-center"><span class="text-slate-500">Coming Soon</span></div>
-                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                    <h3 class="text-white text-2xl font-bold text-center">Project Title Three</h3>
-                </div>
-            </div>
-             <!-- Reel Item 4 (Placeholder) -->
-            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl bg-slate-800 scroll-animate" style="transition-delay: 400ms;">
-                <div class="w-full h-full flex items-center justify-center"><span class="text-slate-500">Coming Soon</span></div>
-                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                    <h3 class="text-white text-2xl font-bold text-center">Project Title Four</h3>
-                </div>
-            </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- SERVICES SECTION -->
-    <section id="services" class="py-20 md:py-32">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Craft & Services</h2>
-            <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
-                I offer a range of services designed to elevate your content and make your vision a reality.
-            </p>
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Service 1 -->
-                <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 100ms;">
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Reel & Shorts Editing</h3>
-                    <p class="text-slate-400">Fast-paced, high-impact editing for social media platforms like Instagram, TikTok, and YouTube Shorts, optimized for maximum engagement and virality.</p>
-                </div>
-                <!-- Service 2 -->
-                <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 200ms;">
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Cinematic Color Grading</h3>
-                    <p class="text-slate-400">Professional color correction and grading to establish a mood, enhance the visual narrative, and give your footage a high-end, cinematic look.</p>
-                </div>
-                <!-- Service 3 -->
-                <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 300ms;">
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Brand & Corporate Video</h3>
-                    <p class="text-slate-400">Polished editing for brand stories, promotional videos, and corporate content that communicates your message clearly and professionally.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- THE PROCESS SECTION -->
-    <section id="process" class="py-20 md:py-32 bg-slate-900/50">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Creative Process</h2>
-            <p class="text-slate-400 max-w-3xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
-                From initial concept to final cut, every project follows a structured path to ensure excellence and a seamless collaboration.
-            </p>
-            <div class="grid md:grid-cols-4 gap-8 relative">
-                <!-- Dotted line connector -->
-                <div class="hidden md:block absolute top-1/2 left-0 w-full h-px bg-slate-700 -translate-y-1/2 -mt-8"></div>
-                <!-- Step 1 -->
-                <div class="relative scroll-animate" style="transition-delay: 100ms;">
-                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">01</div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Discovery</h3>
-                    <p class="text-slate-400">We start with a deep dive into your vision, goals, and target audience to ensure we're aligned on the 'why' behind the project.</p>
-                </div>
-                <!-- Step 2 -->
-                <div class="relative scroll-animate" style="transition-delay: 200ms;">
-                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">02</div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Storycrafting</h3>
-                    <p class="text-slate-400">I meticulously review all footage, identifying key moments and weaving them into a powerful narrative—the first assembly of your story.</p>
-                </div>
-                <!-- Step 3 -->
-                <div class="relative scroll-animate" style="transition-delay: 300ms;">
-                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">03</div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Cinematic Polish</h3>
-                    <p class="text-slate-400">This is where the magic happens. I apply precise color grading, sound design, and pacing adjustments to elevate the footage into a cinematic piece.</p>
-                </div>
-                <!-- Step 4 -->
-                <div class="relative scroll-animate" style="transition-delay: 400ms;">
-                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">04</div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Review & Delivery</h3>
-                    <p class="text-slate-400">We'll collaborate on any final tweaks before I deliver the high-resolution master files, optimized for your intended platforms.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="py-20 md:py-32">
-      <div class="container mx-auto px-6 text-center">
-        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Let's Create Something<br>Extraordinary.</h2>
-        <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-12 scroll-animate" style="transition-delay: 200ms;">
-          Have a project in mind? I'd love to hear about it. Reach out to discuss your vision.
-        </p>
-        <form onsubmit="return redirectToGmail();" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
-          <div class="mb-4">
-            <label for="userName" class="block text-slate-400 mb-2">Your Name</label>
-            <input type="text" id="userName" placeholder="What should I call you?" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
-          </div>
-          <div class="mb-6">
-            <label for="userMessage" class="block text-slate-400 mb-2">Your Message</label>
-            <textarea id="userMessage" placeholder="Tell me about your project..." required rows="5" class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target"></textarea>
-          </div>
-          <button type="submit" class="w-full py-4 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
-            Send Message
+        <a href="#contact" class="hidden sm:block px-6 py-2 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
+          Contact Me
+        </a>
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-white hover-target">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
           </button>
-        </form>
-      </div>
-    </section>
+        </div>
+      </nav>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 glassmorphism hidden">
+        <div class="flex flex-col items-center justify-center h-full space-y-8">
+          <a href="#about" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">About</a>
+          <a href="#showcase" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Showcase</a>
+          <a href="#services" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Services</a>
+          <a href="#process" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Process</a>
+          <a href="#contact" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Contact</a>
+        </div>
+    </div>
 
-  </main>
 
-  <!-- FOOTER -->
-  <footer class="py-8 text-center">
-    <p class="text-slate-500">&copy; 2025 Karnishh Videography. Crafted with passion.</p>
-  </footer>
+    <!-- MAIN CONTENT -->
+    <main>
+      <!-- HERO SECTION -->
+      <section id="home" class="h-screen min-h-[700px] w-full flex items-center justify-center text-center hero-bg relative overflow-hidden">
+        <div class="absolute inset-0 bg-grid-slate-800/20 [mask-image:linear-gradient(to_bottom,white_20%,transparent_70%)]"></div>
+        <div class="z-10 px-4">
+          <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold text-white leading-tight tracking-tighter scroll-animate">
+            Editing Stories,<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Frame by Frame.</span>
+          </h1>
+          <p class="text-slate-400 mt-6 max-w-2xl mx-auto text-lg md:text-xl scroll-animate" style="transition-delay: 200ms;">
+            I am Karnishh, a video editor who transforms raw footage into compelling narratives that captivate, engage, and inspire.
+          </p>
+          <div class="mt-10 scroll-animate" style="transition-delay: 400ms;">
+            <a href="#showcase" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-200 transition-all duration-300 transform hover:scale-105 hover-target">
+              View My Work
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section id="about" class="py-20 md:py-32">
+        <div class="container mx-auto px-6">
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="scroll-animate">
+              <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">The Visionary<br>Behind the Edit.</h2>
+              <p class="text-slate-400 text-lg mb-6">
+                My name is Karnishh, and my passion is storytelling. I believe every clip has a purpose, every transition has a rhythm, and every color tells a story. With a meticulous eye for detail and a deep understanding of pacing, I don't just edit videos—I craft cinematic experiences. 
+              </p>
+              <p class="text-slate-400 text-lg">
+                From viral social media reels to polished brand stories, I leverage cutting-edge tools and AI-enhanced workflows to deliver content that not only looks stunning but also achieves its goals.
+              </p>
+            </div>
+            <div class="scroll-animate" style="transition-delay: 200ms;">
+              <div class="glassmorphism rounded-2xl p-8">
+                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px; margin: auto;" loop autoplay></lottie-player>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SHOWCASE SECTION -->
+      <section id="showcase" class="py-20 md:py-32 bg-slate-900/50">
+        <div class="container mx-auto px-6 text-center">
+          <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Recent Work</h2>
+          <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
+            A selection of projects that showcase my editing style and versatility.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <!-- Reel Item 1 -->
+              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 100ms;">
+                  <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/DJEmc-EyI2Z/embed" allowfullscreen></iframe>
+                  <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                      <h3 class="text-white text-2xl font-bold text-center">Cinematic Edit</h3>
+                  </div>
+              </div>
+              <!-- Reel Item 2 -->
+              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 200ms;">
+                  <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/DIx1ZkUSza4/embed" allowfullscreen></iframe>
+                  <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                      <h3 class="text-white text-2xl font-bold text-center">Sports Showcase</h3>
+                  </div>
+              </div>
+              <!-- Reel Item 3 -->
+              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 300ms;">
+                  <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/DKU0eNxS6Gc/embed" allowfullscreen></iframe>
+                  <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                      <h3 class="text-white text-2xl font-bold text-center">AI Knowledge</h3>
+                  </div>
+              </div>
+              <!-- Reel Item 4 -->
+              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 400ms;">
+                  <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/DJJ9iFzysUl/embed" allowfullscreen></iframe>
+                  <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                      <h3 class="text-white text-2xl font-bold text-center">Dynamic Montage</h3>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- SERVICES SECTION -->
+      <section id="services" class="py-20 md:py-32">
+          <div class="container mx-auto px-6 text-center">
+              <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Craft & Services</h2>
+              <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
+                  I offer a range of services designed to elevate your content and make your vision a reality.
+              </p>
+              <div class="grid md:grid-cols-3 gap-8">
+                  <!-- Service 1 -->
+                  <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 100ms;">
+                      <h3 class="text-2xl font-bold text-cyan-400 mb-4">Reel & Shorts Editing</h3>
+                      <p class="text-slate-400">Fast-paced, high-impact editing for social media platforms like Instagram, TikTok, and YouTube Shorts, optimized for maximum engagement and virality.</p>
+                  </div>
+                  <!-- Service 2 -->
+                  <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 200ms;">
+                      <h3 class="text-2xl font-bold text-cyan-400 mb-4">Cinematic Color Grading</h3>
+                      <p class="text-slate-400">Professional color correction and grading to establish a mood, enhance the visual narrative, and give your footage a high-end, cinematic look.</p>
+                  </div>
+                  <!-- Service 3 -->
+                  <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 300ms;">
+                      <h3 class="text-2xl font-bold text-cyan-400 mb-4">Brand & Corporate Video</h3>
+                      <p class="text-slate-400">Polished editing for brand stories, promotional videos, and corporate content that communicates your message clearly and professionally.</p>
+                  </div>
+              </div>
+          </div>
+      </section>
+      
+      <!-- THE PROCESS SECTION -->
+      <section id="process" class="py-20 md:py-32 bg-slate-900/50">
+          <div class="container mx-auto px-6 text-center">
+              <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Creative Process</h2>
+              <p class="text-slate-400 max-w-3xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
+                  From initial concept to final cut, every project follows a structured path to ensure excellence and a seamless collaboration.
+              </p>
+              <div class="grid md:grid-cols-4 gap-12 md:gap-8 relative">
+                  <!-- Dotted line connector for desktop -->
+                  <div class="hidden md:block absolute top-8 left-0 w-full h-px bg-slate-700"></div>
+                  <!-- Step 1 -->
+                  <div class="relative scroll-animate" style="transition-delay: 100ms;">
+                      <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">01</div>
+                      <h3 class="text-2xl font-bold text-white mb-4">Discovery</h3>
+                      <p class="text-slate-400">We start with a deep dive into your vision, goals, and target audience to ensure we're aligned on the 'why' behind the project.</p>
+                  </div>
+                  <!-- Step 2 -->
+                  <div class="relative scroll-animate" style="transition-delay: 200ms;">
+                      <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">02</div>
+                      <h3 class="text-2xl font-bold text-white mb-4">Storycrafting</h3>
+                      <p class="text-slate-400">I meticulously review all footage, identifying key moments and weaving them into a powerful narrative—the first assembly of your story.</p>
+                  </div>
+                  <!-- Step 3 -->
+                  <div class="relative scroll-animate" style="transition-delay: 300ms;">
+                      <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">03</div>
+                      <h3 class="text-2xl font-bold text-white mb-4">Cinematic Polish</h3>
+                      <p class="text-slate-400">This is where the magic happens. I apply precise color grading, sound design, and pacing adjustments to elevate the footage into a cinematic piece.</p>
+                  </div>
+                  <!-- Step 4 -->
+                  <div class="relative scroll-animate" style="transition-delay: 400ms;">
+                      <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">04</div>
+                      <h3 class="text-2xl font-bold text-white mb-4">Review & Delivery</h3>
+                      <p class="text-slate-400">We'll collaborate on any final tweaks before I deliver the high-resolution master files, optimized for your intended platforms.</p>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- CONTACT SECTION -->
+      <section id="contact" class="py-20 md:py-32">
+        <div class="container mx-auto px-6 text-center">
+          <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Let's Create Something<br>Extraordinary.</h2>
+          <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-12 scroll-animate" style="transition-delay: 200ms;">
+            Have a project in mind? I'd love to hear about it. Reach out to discuss your vision.
+          </p>
+          <form onsubmit="return redirectToGmail();" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
+            <div class="mb-4">
+              <label for="userName" class="block text-slate-400 mb-2">Your Name</label>
+              <input type="text" id="userName" placeholder="What should I call you?" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
+            </div>
+            <div class="mb-6">
+              <label for="userMessage" class="block text-slate-400 mb-2">Your Message</label>
+              <textarea id="userMessage" placeholder="Tell me about your project..." required rows="5" class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target"></textarea>
+            </div>
+            <button type="submit" class="w-full py-4 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-8 text-center">
+      <p class="text-slate-500">&copy; 2025 Karnishh Videography. Crafted with passion.</p>
+    </footer>
+  </div>
 
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        // --- Custom Cursor Logic ---
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
-        const customCursor = document.querySelector('.custom-cursor');
+        const body = document.body;
+        const deviceSelector = document.getElementById('device-selector');
+        const mainContentWrapper = document.getElementById('main-content-wrapper');
+        const desktopBtn = document.getElementById('desktop-btn');
+        const mobileBtn = document.getElementById('mobile-btn');
 
-        window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: 'forwards' });
-        });
+        function initializeSite(isDesktop) {
+            // Fade out selector
+            deviceSelector.classList.add('fade-out');
+            
+            // Show content
+            mainContentWrapper.classList.remove('content-hidden');
 
-        document.querySelectorAll('.hover-target').forEach(el => {
-            el.addEventListener('mouseover', () => customCursor.classList.add('hovered'));
-            el.addEventListener('mouseout', () => customCursor.classList.remove('hovered'));
-        });
+            if (isDesktop) {
+                body.classList.add('desktop-cursor');
+                initializeDesktopFeatures();
+            }
+            
+            initializeCommonFeatures();
+        }
 
-        // --- Sticky Header on Scroll ---
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('glassmorphism', window.scrollY > 50);
-        });
+        desktopBtn.addEventListener('click', () => initializeSite(true));
+        mobileBtn.addEventListener('click', () => initializeSite(false));
 
-        // --- Scroll Animation Logic ---
-        const animatedElements = document.querySelectorAll('.scroll-animate');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+        function initializeDesktopFeatures() {
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+            const customCursor = document.querySelector('.custom-cursor');
+
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+                cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: 'forwards' });
             });
-        }, { threshold: 0.1 });
-        animatedElements.forEach(el => observer.observe(el));
+
+            document.querySelectorAll('.hover-target').forEach(el => {
+                el.addEventListener('mouseover', () => customCursor.classList.add('hovered'));
+                el.addEventListener('mouseout', () => customCursor.classList.remove('hovered'));
+            });
+        }
+
+        function initializeCommonFeatures() {
+            // Sticky Header on Scroll
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('glassmorphism', window.scrollY > 50);
+            });
+
+            // Scroll Animation Logic
+            const animatedElements = document.querySelectorAll('.scroll-animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            animatedElements.forEach(el => observer.observe(el));
+
+            // Mobile Menu Logic
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
     });
 
     // --- Contact Form ---
