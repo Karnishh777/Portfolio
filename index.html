@@ -137,6 +137,18 @@
     <!-- AI SUITE SECTION -->
     <section id="ai-suite" class="my-16 text-center">
         <h2 class="text-4xl font-bold text-blue-400 mb-8">✨ AI Suite</h2>
+        
+        <!-- Important Notice for Local Development -->
+        <div id="local-server-notice" class="max-w-3xl mx-auto p-4 mb-8 bg-yellow-900/50 border border-yellow-700 rounded-lg text-left relative">
+            <button onclick="document.getElementById('local-server-notice').style.display='none'" class="absolute top-2 right-3 text-yellow-400 hover:text-white text-2xl leading-none">&times;</button>
+            <h4 class="font-bold text-yellow-300">Important: Running This Page</h4>
+            <p class="text-yellow-400 text-sm mt-1">
+                For the AI features to work, this HTML file must be run from a web server, not opened directly from your computer's file system (i.e., not using a `file:///` URL). This is due to browser security policies.
+                <br>
+                <strong>Easy Solution:</strong> If you are using an editor like VS Code, install the "Live Server" extension, right-click this file, and choose "Open with Live Server".
+            </p>
+        </div>
+
         <div class="space-y-12">
             <!-- AI Trend Spotter -->
             <div class="p-8 bg-gray-800/50 border border-purple-800 rounded-lg">
