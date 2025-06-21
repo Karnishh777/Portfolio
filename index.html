@@ -3,705 +3,359 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karnishh Videography</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Karnishh Videography - Cinematic Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Custom font */
+    :root {
+      --cursor-size: 10px;
+      --cursor-outline-size: 30px;
+      --cursor-outline-offset: calc((var(--cursor-outline-size) - var(--cursor-size)) / 2);
+      --cursor-color: #06b6d4;
+      --cursor-bg: rgba(6, 182, 212, 0.1);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
     body {
-      font-family: 'Montserrat', sans-serif;
-      overflow-x: hidden; /* Prevents horizontal scrollbar from appearing */
+      font-family: 'Poppins', sans-serif;
+      background-color: #020617;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      cursor: none; /* Hide the default cursor */
     }
-    /* Custom animation for the header title */
-    @keyframes pulse-glow {
-      0%, 100% {
-        transform: scale(1);
-        text-shadow: 0 0 10px #38b6ff, 0 0 20px #38b6ff, 0 0 30px #38b6ff;
-      }
-      50% {
-        transform: scale(1.03);
-        text-shadow: 0 0 20px #38b6ff, 0 0 30px #38b6ff, 0 0 40px #38b6ff;
-      }
+    .custom-cursor .cursor-dot {
+      width: var(--cursor-size);
+      height: var(--cursor-size);
+      background-color: var(--cursor-color);
+      border-radius: 50%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10000;
+      transition: transform 0.2s ease-out;
     }
-    .title-animate {
-      animation: pulse-glow 2.5s infinite ease-in-out;
+    .custom-cursor .cursor-outline {
+      width: var(--cursor-outline-size);
+      height: var(--cursor-outline-size);
+      border: 2px solid var(--cursor-color);
+      border-radius: 50%;
+      position: fixed;
+      top: calc(50% - var(--cursor-outline-offset));
+      left: calc(50% - var(--cursor-outline-offset));
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10000;
+      transition: all 0.3s ease-out;
     }
-    /* Style for the AI generated idea cards */
-    .idea-card {
-        background-color: rgba(30, 64, 175, 0.3); /* Darker blue with opacity */
-        border: 1px solid #38b6ff;
-        border-radius: 0.75rem;
-        padding: 1.5rem;
-        margin-top: 1rem;
-        box-shadow: 0 4px 15px rgba(56, 182, 255, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .custom-cursor.hovered .cursor-outline {
+      transform: scale(1.5);
+      background-color: var(--cursor-bg);
+      border-width: 1px;
     }
-    .idea-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(56, 182, 255, 0.2);
+    .custom-cursor.hovered .cursor-dot {
+      transform: scale(0);
     }
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-        width: 8px;
+    @keyframes hero-glow {
+      0% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.2), 0 0 80px rgba(192, 38, 211, 0.1); }
+      50% { box-shadow: 0 0 60px rgba(6, 182, 212, 0.4), 0 0 120px rgba(192, 38, 211, 0.2); }
+      100% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.2), 0 0 80px rgba(192, 38, 211, 0.1); }
     }
-    ::-webkit-scrollbar-track {
-        background: #0a192f;
+    .hero-bg {
+        background: radial-gradient(ellipse at 50% 50%, rgba(13, 20, 48, 0.9) 0%, rgba(2, 6, 23, 1) 70%);
+        animation: hero-glow 10s infinite ease-in-out;
     }
-    ::-webkit-scrollbar-thumb {
-        background: #38b6ff;
-        border-radius: 4px;
+    .glassmorphism {
+        background: rgba(15, 23, 42, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #64cfff;
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
-    /* Aspect ratio for reels */
-    .reel-iframe {
-      width: 100%;
-      aspect-ratio: 9 / 16;
-      border: none;
-      border-radius: 0.5rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
     }
-    /* Disabled button style */
-    .disabled-btn {
-        background-color: #4a5568 !important;
-        cursor: not-allowed !important;
+    .reel-item .reel-overlay {
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    .reel-item:hover .reel-overlay {
+        opacity: 1;
+    }
+    .reel-item .reel-iframe {
+        transition: transform 0.4s ease;
+    }
+    .reel-item:hover .reel-iframe {
+        transform: scale(1.05);
+    }
+    .form-input {
+        background-color: rgba(15, 23, 42, 0.5);
+        border: 1px solid #334155;
+        transition: all 0.3s ease;
+    }
+    .form-input:focus {
+        background-color: rgba(15, 23, 42, 0.8);
+        border-color: #06b6d4;
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
     }
   </style>
 </head>
-<body class="bg-gray-900 text-gray-200 transition-colors duration-500" id="body-light-check">
-  <!-- THEME TOGGLE BUTTON -->
-  <button id="theme-toggle" class="fixed top-4 right-4 z-50 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-transform transform hover:scale-110">
-    <svg id="theme-icon-light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-    <svg id="theme-icon-dark" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-  </button>
+<body class="bg-slate-900">
+  <div class="custom-cursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+  </div>
 
-  <!-- GO TO TOP BUTTON -->
-  <button id="goTopBtn" class="fixed bottom-5 right-5 z-50 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-opacity opacity-0 pointer-events-none">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-  </button>
-
-  <!-- HEADER -->
-  <header class="bg-gray-900/70 backdrop-blur-sm text-center py-12 px-4 border-b border-blue-800">
-    <img src="https://placehold.co/400x150/0a192f/38b6ff?text=Karnishh&font=montserrat" alt="Karnishh Logo" class="mx-auto mb-6 h-24 w-auto rounded-lg">
-    <h1 class="text-5xl font-bold text-blue-400 title-animate">Karnishh Videography</h1>
-    <p class="text-gray-400 mt-2 text-lg">Crafting Reels That Resonate</p>
+  <!-- HEADER & NAVIGATION -->
+  <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold text-white hover-target">Karnishh.</a>
+      <div class="space-x-8 hidden md:flex">
+        <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">About</a>
+        <a href="#showcase" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Showcase</a>
+        <a href="#services" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Services</a>
+        <a href="#process" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Process</a>
+      </div>
+      <a href="#contact" class="px-6 py-2 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
+        Contact Me
+      </a>
+    </nav>
   </header>
 
-  <!-- NAVIGATION -->
-  <nav class="sticky top-0 z-40 bg-gray-800/80 backdrop-blur-md shadow-lg py-4">
-    <div class="container mx-auto flex justify-center items-center flex-wrap gap-4 md:gap-8">
-      <a href="#home" class="text-gray-300 hover:text-blue-400 transition font-semibold">Home</a>
-      <a href="#about" class="text-gray-300 hover:text-blue-400 transition font-semibold">About</a>
-      <a href="#works" class="text-gray-300 hover:text-blue-400 transition font-semibold">Works</a>
-      <a href="#ai-suite" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Suite</a>
-      <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition font-semibold">Pricing</a>
-      <a href="#contact" class="text-gray-300 hover:text-blue-400 transition font-semibold">Contact</a>
-    </div>
-  </nav>
-
   <!-- MAIN CONTENT -->
-  <main class="container mx-auto p-4 md:p-8">
-    
-    <!-- HOME SECTION -->
-    <section id="home" class="text-center my-16">
-      <h2 class="text-4xl font-bold text-blue-400 mb-4">Welcome to My Creative World</h2>
-      <p class="max-w-3xl mx-auto mt-4 text-lg text-gray-400">Explore my universe of visual storytelling—from powerful narratives to AI-enhanced edits, engineered to captivate and dominate on digital platforms.</p>
+  <main>
+    <!-- HERO SECTION -->
+    <section id="home" class="h-screen min-h-[700px] w-full flex items-center justify-center text-center hero-bg relative overflow-hidden">
+      <div class="absolute inset-0 bg-grid-slate-800/20 [mask-image:linear-gradient(to_bottom,white_20%,transparent_70%)]"></div>
+      <div class="z-10 px-4">
+        <h1 class="text-5xl md:text-8xl font-bold text-white leading-tight tracking-tighter scroll-animate">
+          Editing Stories,<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Frame by Frame.</span>
+        </h1>
+        <p class="text-slate-400 mt-6 max-w-2xl mx-auto text-lg md:text-xl scroll-animate" style="transition-delay: 200ms;">
+          I am Karnishh, a video editor who transforms raw footage into compelling narratives that captivate, engage, and inspire.
+        </p>
+        <div class="mt-10 scroll-animate" style="transition-delay: 400ms;">
+          <a href="#showcase" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-200 transition-all duration-300 transform hover:scale-105 hover-target">
+            View My Work
+          </a>
+        </div>
+      </div>
     </section>
-    
+
     <!-- ABOUT SECTION -->
-    <section id="about" class="my-16">
-        <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">About Me</h2>
-        <div class="flex flex-col md:flex-row items-center gap-8">
-            <div class="md:w-1/2">
-                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px;" loop autoplay></lottie-player>
+    <section id="about" class="py-20 md:py-32">
+      <div class="container mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="scroll-animate">
+             <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">The Visionary<br>Behind the Edit.</h2>
+             <p class="text-slate-400 text-lg mb-6">
+               My name is Karnishh, and my passion is storytelling. I believe every clip has a purpose, every transition has a rhythm, and every color tells a story. With a meticulous eye for detail and a deep understanding of pacing, I don't just edit videos—I craft cinematic experiences. 
+             </p>
+             <p class="text-slate-400 text-lg">
+               From viral social media reels to polished brand stories, I leverage cutting-edge tools and AI-enhanced workflows to deliver content that not only looks stunning but also achieves its goals.
+             </p>
+          </div>
+          <div class="scroll-animate" style="transition-delay: 200ms;">
+            <div class="glassmorphism rounded-2xl p-8">
+              <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px; margin: auto;" loop autoplay></lottie-player>
             </div>
-            <div class="md:w-1/2">
-                <p class="text-lg mb-6 text-gray-300">I’m Karnishh, a visionary reel editor specializing in cinematic storytelling and advanced AI tools. My edits are sharp, fast-paced, and engineered for virality, all while ensuring zero copyright issues.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/DaVinci_Resolve_Studio.png" alt="Davinci Logo" class="w-6 h-6 object-contain"> <span class="font-semibold">Davinci Resolve & Premiere Pro</span></li>
-                    <li class="flex items-center gap-3"><img src="https://placehold.co/24x24/38b6ff/FFFFFF?text=AI" alt="AI Icon" class="w-6 h-6 rounded"> <span class="font-semibold">Advanced AI Tooling</span></li>
-                    <li class="flex items-center gap-3"><img src="https://placehold.co/24x24/38b6ff/FFFFFF?text=CC" alt="Copyright Icon" class="w-6 h-6 rounded"> <span class="font-semibold">Zero Copyright Content</span></li>
-                    <li class="flex items-center gap-3"><img src="https://placehold.co/24x24/38b6ff/FFFFFF?text=C" alt="Color Grade Icon" class="w-6 h-6 rounded"> <span class="font-semibold">Cinematic Color Grading</span></li>
-                </ul>
-            </div>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- WORKS SECTION -->
-    <section id="works" class="my-16">
-        <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">My Work</h2>
+    <!-- SHOWCASE SECTION -->
+    <section id="showcase" class="py-20 md:py-32 bg-slate-900/50">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Recent Work</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
+          A selection of projects that showcase my editing style and versatility.
+        </p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <iframe class="reel-iframe" src="https://www.instagram.com/reel/CqZQX0_g9vA/embed" allowfullscreen></iframe>
-            <iframe class="reel-iframe" src="https://www.instagram.com/reel/Cr_qZ0_g5F4/embed" allowfullscreen></iframe>
-            <div class="w-full aspect-[9/16] bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable</span></div>
-            <div class="w-full aspect-[9/16] bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable</span></div>
+            <!-- Reel Item 1 -->
+            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 100ms;">
+                <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/CqZQX0_g9vA/embed" allowfullscreen></iframe>
+                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                    <h3 class="text-white text-2xl font-bold text-center">Project Title One</h3>
+                </div>
+            </div>
+            <!-- Reel Item 2 -->
+            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 200ms;">
+                <iframe class="reel-iframe w-full h-full" src="https://www.instagram.com/reel/Cr_qZ0_g5F4/embed" allowfullscreen></iframe>
+                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                    <h3 class="text-white text-2xl font-bold text-center">Project Title Two</h3>
+                </div>
+            </div>
+            <!-- Reel Item 3 (Placeholder) -->
+            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl bg-slate-800 scroll-animate" style="transition-delay: 300ms;">
+                 <div class="w-full h-full flex items-center justify-center"><span class="text-slate-500">Coming Soon</span></div>
+                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                    <h3 class="text-white text-2xl font-bold text-center">Project Title Three</h3>
+                </div>
+            </div>
+             <!-- Reel Item 4 (Placeholder) -->
+            <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl bg-slate-800 scroll-animate" style="transition-delay: 400ms;">
+                <div class="w-full h-full flex items-center justify-center"><span class="text-slate-500">Coming Soon</span></div>
+                <div class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
+                    <h3 class="text-white text-2xl font-bold text-center">Project Title Four</h3>
+                </div>
+            </div>
         </div>
+      </div>
     </section>
-
-    <!-- AI SUITE SECTION -->
-    <section id="ai-suite" class="my-16 text-center">
-        <h2 class="text-4xl font-bold text-blue-400 mb-8">✨ AI Suite</h2>
-        
-        <div id="api-key-notice" class="max-w-3xl mx-auto p-4 mb-8 bg-red-900/50 border border-red-700 rounded-lg text-left hidden">
-            <h4 class="font-bold text-red-300">API Key Error - Running in Demo Mode</h4>
-            <p class="text-red-400 text-sm mt-1">
-                The AI features could not be activated due to a permission error with the API key (HTTP 403). This usually means the **Generative Language API** is not enabled in the associated Google Cloud project. You can explore the features below using pre-made examples.
+    
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-20 md:py-32">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Craft & Services</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
+                I offer a range of services designed to elevate your content and make your vision a reality.
             </p>
-        </div>
-        
-        <div class="space-y-12">
-            <!-- AI Location Scout -->
-            <div class="p-8 bg-gray-800/50 border border-cyan-800 rounded-lg">
-                <h3 class="text-3xl font-bold text-cyan-400 mb-4">AI Location Scout</h3>
-                <p class="max-w-2xl mx-auto text-gray-400 mb-8">Describe a scene, and our AI will suggest real filming locations. (Free uses: <span id="location-usage-count">5</span>/5)</p>
-                <div class="max-w-2xl mx-auto">
-                    <div class="flex gap-2">
-                        <input type="text" id="scene-prompt" class="w-full bg-gray-800 border border-cyan-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 focus:outline-none" placeholder="e.g., 'historic temple background in Madurai'">
-                        <button id="find-locations-btn" class="bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-cyan-700 transition-colors flex items-center gap-2">
-                            Scout
-                        </button>
-                    </div>
-                    <div id="locations-loading-spinner" class="hidden mt-8">
-                        <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div></div>
-                    </div>
-                    <div id="locations-output" class="mt-8 text-left"></div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 100ms;">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Reel & Shorts Editing</h3>
+                    <p class="text-slate-400">Fast-paced, high-impact editing for social media platforms like Instagram, TikTok, and YouTube Shorts, optimized for maximum engagement and virality.</p>
                 </div>
-            </div>
-
-            <!-- AI Trend Spotter -->
-            <div class="p-8 bg-gray-800/50 border border-purple-800 rounded-lg">
-                <h3 class="text-3xl font-bold text-purple-400 mb-4">AI Trend Spotter</h3>
-                <p class="max-w-2xl mx-auto text-gray-400 mb-8">Enter your niche to discover the latest Instagram Reel trends. (Free uses: <span id="trend-usage-count">5</span>/5)</p>
-                <div class="max-w-2xl mx-auto">
-                    <div class="flex gap-2">
-                        <input type="text" id="niche-prompt" class="w-full bg-gray-800 border border-purple-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none" placeholder="e.g., 'fashion', 'tech', 'food'">
-                        <button id="spot-trends-btn" class="bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
-                            Spot Trends
-                        </button>
-                    </div>
-                    <div id="trends-loading-spinner" class="hidden mt-8">
-                        <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div></div>
-                    </div>
-                    <div id="trends-output" class="mt-8 text-left"></div>
+                <!-- Service 2 -->
+                <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 200ms;">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Cinematic Color Grading</h3>
+                    <p class="text-slate-400">Professional color correction and grading to establish a mood, enhance the visual narrative, and give your footage a high-end, cinematic look.</p>
                 </div>
-            </div>
-
-            <!-- AI Content Studio -->
-            <div class="p-8 bg-gray-800/50 border border-green-800 rounded-lg">
-                 <h3 class="text-3xl font-bold text-green-400 mb-4">AI Content Studio</h3>
-                 <p class="max-w-2xl mx-auto text-gray-400 mb-8">From idea to script to caption, generate all you need for your next viral reel. <br>(Scripts: <span id="script-usage-count">3</span>/3) (Captions: <span id="caption-usage-count">3</span>/3) (Thumbnails: <span id="thumbnail-usage-count">3</span>/3)</p>
-                <div class="max-w-2xl mx-auto">
-                    <div class="flex gap-2">
-                        <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-green-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
-                        <button id="generate-ideas-btn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
-                            Generate Ideas
-                        </button>
-                    </div>
-                    <div id="studio-loading-spinner" class="hidden mt-8">
-                        <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400"></div></div>
-                    </div>
-                    <div id="ideas-output" class="mt-8 text-left"></div>
-                    <div id="script-output" class="mt-8 text-left"></div>
-                    <div id="captions-output" class="mt-8 text-left"></div>
-                    <div id="thumbnail-output" class="mt-8 text-left"></div>
+                <!-- Service 3 -->
+                <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 300ms;">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Brand & Corporate Video</h3>
+                    <p class="text-slate-400">Polished editing for brand stories, promotional videos, and corporate content that communicates your message clearly and professionally.</p>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- PRICING SECTION -->
-    <section id="pricing" class="my-16">
-        <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">Pricing & Packages</h2>
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
-                <h3 class="text-2xl font-bold mb-4">Basic Edit</h3>
-                <p class="text-5xl font-bold mb-4 text-blue-400">₹799</p>
-                <p class="text-gray-400 mb-6">per reel</p>
-                <ul class="text-left space-y-2 text-gray-300">
-                    <li>✓ Standard Cuts & Transitions</li>
-                    <li>✓ Royalty-Free Music</li>
-                    <li>✓ 2 Day Delivery</li>
-                </ul>
-            </div>
-            <div class="bg-blue-900 p-8 rounded-lg border-2 border-blue-500 text-center relative overflow-hidden">
-                <span class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</span>
-                <h3 class="text-2xl font-bold mb-4">Advanced Edit</h3>
-                <p class="text-5xl font-bold mb-4 text-blue-400">₹999</p>
-                <p class="text-gray-400 mb-6">per reel</p>
-                <ul class="text-left space-y-2 text-gray-300">
-                    <li>✓ Everything in Basic</li>
-                    <li>✓ Advanced AI Effects</li>
-                    <li>✓ Custom Sound Design</li>
-                    <li>✓ Cinematic Color Grade</li>
-                </ul>
-            </div>
-            <div class="bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
-                <h3 class="text-2xl font-bold mb-4">Creator Pack</h3>
-                <p class="text-5xl font-bold mb-4 text-blue-400">₹5999</p>
-                <p class="text-gray-400 mb-6">monthly</p>
-                <ul class="text-left space-y-2 text-gray-300">
-                    <li>✓ 8 Advanced Reels</li>
-                    <li>✓ Priority Support</li>
-                    <li>✓ Strategy Consultation</li>
-                </ul>
+    
+    <!-- THE PROCESS SECTION -->
+    <section id="process" class="py-20 md:py-32 bg-slate-900/50">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Creative Process</h2>
+            <p class="text-slate-400 max-w-3xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
+                From initial concept to final cut, every project follows a structured path to ensure excellence and a seamless collaboration.
+            </p>
+            <div class="grid md:grid-cols-4 gap-8 relative">
+                <!-- Dotted line connector -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-px bg-slate-700 -translate-y-1/2 -mt-8"></div>
+                <!-- Step 1 -->
+                <div class="relative scroll-animate" style="transition-delay: 100ms;">
+                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">01</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Discovery</h3>
+                    <p class="text-slate-400">We start with a deep dive into your vision, goals, and target audience to ensure we're aligned on the 'why' behind the project.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="relative scroll-animate" style="transition-delay: 200ms;">
+                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">02</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Storycrafting</h3>
+                    <p class="text-slate-400">I meticulously review all footage, identifying key moments and weaving them into a powerful narrative—the first assembly of your story.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="relative scroll-animate" style="transition-delay: 300ms;">
+                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">03</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Cinematic Polish</h3>
+                    <p class="text-slate-400">This is where the magic happens. I apply precise color grading, sound design, and pacing adjustments to elevate the footage into a cinematic piece.</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="relative scroll-animate" style="transition-delay: 400ms;">
+                    <div class="relative z-10 w-16 h-16 mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-cyan-400 bg-slate-800 border-2 border-slate-700 rounded-full">04</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Review & Delivery</h3>
+                    <p class="text-slate-400">We'll collaborate on any final tweaks before I deliver the high-resolution master files, optimized for your intended platforms.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CONTACT SECTION -->
-    <section id="contact" class="my-16 text-center">
-        <h2 class="text-4xl font-bold text-blue-400 mb-4">Let's Create Together</h2>
-        <p class="text-gray-400 mb-2">Email: <a href="mailto:karnishhvjs10b@gmail.com" class="text-blue-400 hover:underline">karnishhvjs10b@gmail.com</a></p>
-        <p class="text-gray-400 mb-8">Phone: <a href="tel:+919342603979" class="text-blue-400 hover:underline">+91 93426 03979</a></p>
-        <form onsubmit="return redirectToGmail();" class="max-w-lg mx-auto">
-            <input type="text" id="userName" placeholder="Your Name" required class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <textarea id="userMessage" placeholder="Your message or project idea" required class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 mb-4 h-32 focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">Book a Call</button>
+    <section id="contact" class="py-20 md:py-32">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Let's Create Something<br>Extraordinary.</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-12 scroll-animate" style="transition-delay: 200ms;">
+          Have a project in mind? I'd love to hear about it. Reach out to discuss your vision.
+        </p>
+        <form onsubmit="return redirectToGmail();" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
+          <div class="mb-4">
+            <label for="userName" class="block text-slate-400 mb-2">Your Name</label>
+            <input type="text" id="userName" placeholder="What should I call you?" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
+          </div>
+          <div class="mb-6">
+            <label for="userMessage" class="block text-slate-400 mb-2">Your Message</label>
+            <textarea id="userMessage" placeholder="Tell me about your project..." required rows="5" class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target"></textarea>
+          </div>
+          <button type="submit" class="w-full py-4 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
+            Send Message
+          </button>
         </form>
+      </div>
     </section>
 
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-gray-900 border-t border-blue-800 text-center p-6">
-    <p class="text-gray-500">&copy; 2025 Karnishh Videography. All Rights Reserved.</p>
+  <footer class="py-8 text-center">
+    <p class="text-slate-500">&copy; 2025 Karnishh Videography. Crafted with passion.</p>
   </footer>
 
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <script>
-    // --- Global Config ---
-    let DEMO_MODE = false;
+    document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Theme Toggle ---
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const body = document.getElementById('body-light-check');
-    const lightIcon = document.getElementById('theme-icon-light');
-    const darkIcon = document.getElementById('theme-icon-dark');
-    
-    themeToggleBtn.addEventListener('click', () => {
-        body.classList.toggle('bg-gray-100'); body.classList.toggle('text-gray-800');
-        body.classList.toggle('bg-gray-900'); body.classList.toggle('text-gray-200');
-        lightIcon.classList.toggle('hidden'); darkIcon.classList.toggle('hidden');
-    });
+        // --- Custom Cursor Logic ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const customCursor = document.querySelector('.custom-cursor');
 
-    // --- Go To Top Button ---
-    const goTopBtn = document.getElementById('goTopBtn');
-    window.addEventListener('scroll', () => {
-        const scrolled = document.body.scrollTop > 300 || document.documentElement.scrollTop > 300;
-        if (scrolled) { goTopBtn.classList.remove('opacity-0', 'pointer-events-none');
-        } else { goTopBtn.classList.add('opacity-0', 'pointer-events-none'); }
-    });
-    goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-    
-    // --- Smooth Scrolling for Nav Links ---
-    document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: 'forwards' });
         });
+
+        document.querySelectorAll('.hover-target').forEach(el => {
+            el.addEventListener('mouseover', () => customCursor.classList.add('hovered'));
+            el.addEventListener('mouseout', () => customCursor.classList.remove('hovered'));
+        });
+
+        // --- Sticky Header on Scroll ---
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('glassmorphism', window.scrollY > 50);
+        });
+
+        // --- Scroll Animation Logic ---
+        const animatedElements = document.querySelectorAll('.scroll-animate');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        animatedElements.forEach(el => observer.observe(el));
     });
 
     // --- Contact Form ---
     function redirectToGmail() {
         const name = document.getElementById('userName').value;
         const message = document.getElementById('userMessage').value;
-        const subject = encodeURIComponent("Call Request from " + name);
-        const body = encodeURIComponent(message);
+        const subject = encodeURIComponent("Project Inquiry from " + name);
+        const body = encodeURIComponent(message + "\n\nFrom: " + name);
         const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
         window.open(gmailUrl, '_blank');
         return false;
-    }
-
-    // --- Gemini AI Features ---
-    const apiKey = ""; // API key is handled by the environment
-    
-    async function callGeminiAPI(apiUrl, payload) {
-        if (DEMO_MODE) throw new Error("API key is not configured. Running in Demo Mode.");
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.status === 403) {
-                DEMO_MODE = true;
-                document.getElementById('api-key-notice').classList.remove('hidden');
-                throw new Error("API key permission error (HTTP 403). Switched to Demo Mode.");
-            }
-
-            if (!response.ok) {
-                const errorBody = await response.json().catch(() => response.text());
-                throw new Error(`The AI service returned an error (HTTP ${response.status}). Please try again later.`);
-            }
-
-            return await response.json();
-
-        } catch (error) {
-            if (error instanceof TypeError) {
-                 throw new Error("A network error occurred. Please check your connection and try again.");
-            }
-            throw error;
-        }
-    }
-
-    async function generateText(prompt, responseMimeType = 'text/plain') {
-        const payload = {
-            contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType }
-        };
-        const result = await callGeminiAPI(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, payload);
-        
-        if (!result.candidates || result.candidates.length === 0) {
-            if (result.promptFeedback?.blockReason) throw new Error(`Request blocked for safety reasons (${result.promptFeedback.blockReason}). Please try a different topic.`);
-            throw new Error('The AI did not return a valid response.');
-        }
-        const candidate = result.candidates[0];
-        if (candidate.finishReason && candidate.finishReason !== 'STOP') throw new Error(`The AI stopped for an unexpected reason: ${candidate.finishReason}.`);
-        if (!candidate.content?.parts?.[0]?.text) throw new Error('The AI returned an empty response.');
-        return candidate.content.parts[0].text;
-    }
-    
-    async function generateImage(prompt) {
-        const payload = { instances: [{ prompt }], parameters: { "sampleCount": 1 } };
-        const result = await callGeminiAPI(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`, payload);
-        
-        if (!result.predictions?.[0]?.bytesBase64Encoded) {
-            throw new Error('The AI did not generate a valid image.');
-        }
-        return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-    }
-
-    // --- UI Helper for Errors ---
-    function displayError(outputElement, error, retryCallback) {
-        let retryButtonHtml = retryCallback ? `<button class="retry-btn mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">Retry</button>` : '';
-        outputElement.innerHTML = `
-            <div class="idea-card border-red-500">
-                <p class="text-red-400 font-bold">An error occurred:</p>
-                <p class="text-gray-300 mt-2">${error.message}</p>
-                ${retryButtonHtml}
-            </div>
-        `;
-        if (retryCallback) outputElement.querySelector('.retry-btn').onclick = retryCallback;
-    }
-
-    // --- Feature 1: AI Location Scout ---
-    const findLocationsBtn = document.getElementById('find-locations-btn');
-    const scenePromptInput = document.getElementById('scene-prompt');
-    const locationsOutput = document.getElementById('locations-output');
-    const locationsLoadingSpinner = document.getElementById('locations-loading-spinner');
-    const locationUsageCountSpan = document.getElementById('location-usage-count');
-    const LOCATION_LIMIT = 5;
-    let locationScoutCount = parseInt(localStorage.getItem('karnishhLocationCount')) || 0;
-
-    function updateLocationUsageDisplay() {
-        const remaining = LOCATION_LIMIT - locationScoutCount;
-        locationUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
-        if (remaining <= 0) {
-            findLocationsBtn.disabled = true;
-            findLocationsBtn.textContent = 'Limit Reached';
-            findLocationsBtn.classList.add('disabled-btn');
-        }
-    }
-    updateLocationUsageDisplay();
-
-    async function handleLocationScout() {
-        if (DEMO_MODE) {
-            locationsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">**DEMO: AI Location Scout**\n\n**1. Meenakshi Amman Temple:**\nPerfect for your 'historic temple background'. The temple's ancient, intricate architecture and spiritual ambiance provide a stunning, authentic backdrop for traditional performances or cultural content.\n\n**2. Thirumalai Nayakkar Palace:**\nThe grand arches and light & sound show make this ideal for cinematic shots, historical reenactments, or creating a royal, majestic feel for your video.\n\n**3. Vaigai Dam:**\nFor a scenic, natural setting, the Vaigai Dam offers expansive water views and beautiful sunsets, perfect for drone shots, music videos, or peaceful, reflective scenes.</pre></div>`;
-            return;
-        }
-        if (locationScoutCount >= LOCATION_LIMIT) {
-            locationsOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your location scouting limit.</p>`;
-            return;
-        }
-
-        const sceneDesc = scenePromptInput.value;
-        if (!sceneDesc) { locationsOutput.innerHTML = `<p class="text-red-400">Please describe a scene first.</p>`; return; }
-        
-        locationsOutput.innerHTML = '';
-        locationsLoadingSpinner.classList.remove('hidden');
-        findLocationsBtn.disabled = true;
-
-        const locationPrompt = `As a film location scout, suggest 3 specific, real-world filming locations for a video with the following scene description: "${sceneDesc}". The user may specify a city. If so, focus on that city. For each location, briefly explain why it's a good fit for this scene.`;
-        try {
-            const resultText = await generateText(locationPrompt);
-            locationsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">${resultText}</pre></div>`;
-            locationScoutCount++;
-            localStorage.setItem('karnishhLocationCount', locationScoutCount);
-            updateLocationUsageDisplay();
-        } catch (error) { displayError(locationsOutput, error, handleLocationScout);
-        } finally {
-            locationsLoadingSpinner.classList.add('hidden');
-            if (locationScoutCount < LOCATION_LIMIT) findLocationsBtn.disabled = false;
-        }
-    }
-    findLocationsBtn.addEventListener('click', handleLocationScout);
-
-
-    // --- Feature 2: AI Trend Spotter ---
-    const spotTrendsBtn = document.getElementById('spot-trends-btn');
-    const nichePromptInput = document.getElementById('niche-prompt');
-    const trendsOutput = document.getElementById('trends-output');
-    const trendsLoadingSpinner = document.getElementById('trends-loading-spinner');
-    const trendUsageCountSpan = document.getElementById('trend-usage-count');
-    const TREND_LIMIT = 5;
-    let trendSpotterCount = parseInt(localStorage.getItem('karnishhTrendCount')) || 0;
-
-    function updateTrendUsageDisplay() {
-        const remaining = TREND_LIMIT - trendSpotterCount;
-        trendUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
-        if (remaining <= 0) {
-            spotTrendsBtn.disabled = true;
-            spotTrendsBtn.textContent = 'Limit Reached';
-            spotTrendsBtn.classList.add('disabled-btn');
-        }
-    }
-    updateTrendUsageDisplay();
-
-    async function handleSpotTrends() {
-        if (DEMO_MODE) {
-            trendsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">**DEMO: AI Trend Report**\n\n**Trend 1: "A Day in My Niche"**\nDescription: A quick-cut montage showing the behind-the-scenes of a profession in your niche.\nExample for 'fashion': Show quick cuts of sketching a design, choosing fabric, sewing, a model fitting, and the final product on a runway.\n\n**Trend 2: Point-of-View (POV) Scenarios**\nDescription: Use text overlays to create a relatable "POV:" situation for your audience.\nExample for 'fashion': "POV: You found the perfect outfit for the event." Show someone confidently walking into a party.</pre></div>`;
-            return;
-        }
-        if (trendSpotterCount >= TREND_LIMIT) {
-            trendsOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your trend spotting limit.</p>`;
-            return;
-        }
-
-        const niche = nichePromptInput.value || 'general social media';
-        trendsOutput.innerHTML = '';
-        trendsLoadingSpinner.classList.remove('hidden');
-        spotTrendsBtn.disabled = true;
-
-        const trendsPrompt = `As a top social media strategist, identify the top 3 Instagram Reel trends for this month. For each, provide a name, description, and an example for the '${niche}' niche. Format it clearly.`;
-        try {
-            const resultText = await generateText(trendsPrompt);
-            trendsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">${resultText}</pre></div>`;
-            trendSpotterCount++;
-            localStorage.setItem('karnishhTrendCount', trendSpotterCount);
-            updateTrendUsageDisplay();
-        } catch (error) { displayError(trendsOutput, error, handleSpotTrends);
-        } finally {
-            trendsLoadingSpinner.classList.add('hidden');
-            if (trendSpotterCount < TREND_LIMIT) spotTrendsBtn.disabled = false;
-        }
-    }
-    spotTrendsBtn.addEventListener('click', handleSpotTrends);
-
-    // --- Feature 3: AI Content Studio ---
-    const generateIdeasBtn = document.getElementById('generate-ideas-btn');
-    const ideaPromptInput = document.getElementById('idea-prompt');
-    const ideasOutput = document.getElementById('ideas-output');
-    const scriptOutput = document.getElementById('script-output');
-    const captionsOutput = document.getElementById('captions-output');
-    const thumbnailOutput = document.getElementById('thumbnail-output');
-    const studioLoadingSpinner = document.getElementById('studio-loading-spinner');
-    
-    // Usage Counters
-    const scriptUsageCountSpan = document.getElementById('script-usage-count');
-    const captionUsageCountSpan = document.getElementById('caption-usage-count');
-    const thumbnailUsageCountSpan = document.getElementById('thumbnail-usage-count');
-    const SCRIPT_LIMIT = 3, CAPTION_LIMIT = 3, THUMBNAIL_LIMIT = 3;
-    let scriptGenerationCount = parseInt(localStorage.getItem('karnishhScriptCount')) || 0;
-    let captionGenerationCount = parseInt(localStorage.getItem('karnishhCaptionCount')) || 0;
-    let thumbnailGenerationCount = parseInt(localStorage.getItem('karnishhThumbnailCount')) || 0;
-
-    function updateUsageDisplays() {
-        scriptUsageCountSpan.textContent = `${Math.max(0, SCRIPT_LIMIT - scriptGenerationCount)}`;
-        captionUsageCountSpan.textContent = `${Math.max(0, CAPTION_LIMIT - captionGenerationCount)}`;
-        thumbnailUsageCountSpan.textContent = `${Math.max(0, THUMBNAIL_LIMIT - thumbnailGenerationCount)}`;
-    }
-    updateUsageDisplays();
-
-    async function handleGenerateIdeas() {
-        if (DEMO_MODE) {
-            ideasOutput.innerHTML = `<div class="idea-card"><h3 class="text-xl font-bold text-blue-400">DEMO: Unboxing Gadget</h3><p class="text-gray-300 my-2">A fast-paced, visually engaging unboxing of a new tech gadget, focusing on close-ups and satisfying ASMR sounds.</p><p class="text-gray-400 text-sm"><strong>Style:</strong> Sleek, modern, quick cuts</p><button class="create-script-btn mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">✨ Create Script</button></div>`;
-            ideasOutput.querySelector('.create-script-btn').onclick = (e) => generateScript(e.currentTarget, 'DEMO: Unboxing Gadget', 'A fast-paced unboxing.');
-            return;
-        }
-        const promptText = ideaPromptInput.value;
-        if (!promptText) { ideasOutput.innerHTML = `<p class="text-red-400">Please enter a topic first.</p>`; return; }
-
-        ideasOutput.innerHTML = ''; scriptOutput.innerHTML = ''; captionsOutput.innerHTML = ''; thumbnailOutput.innerHTML = '';
-        studioLoadingSpinner.classList.remove('hidden');
-        generateIdeasBtn.disabled = true;
-
-        const fullPrompt = `Generate 3 creative Instagram Reel ideas for the topic: "${promptText}". Return a valid JSON array of objects with "title", "concept", and "style" keys. ONLY return the JSON array.`;
-
-        try {
-            const resultText = await generateText(fullPrompt, 'application/json');
-            const ideas = JSON.parse(resultText);
-
-            ideasOutput.innerHTML = ''; 
-            ideas.forEach(idea => {
-                const ideaCard = document.createElement('div');
-                ideaCard.className = 'idea-card';
-                const isLimitReached = scriptGenerationCount >= SCRIPT_LIMIT;
-                
-                ideaCard.innerHTML = `
-                    <h3 class="text-xl font-bold text-blue-400">${idea.title}</h3>
-                    <p class="text-gray-300 my-2">${idea.concept}</p>
-                    <p class="text-gray-400 text-sm"><strong>Style:</strong> ${idea.style}</p>
-                    <button class="create-script-btn mt-4 ${isLimitReached ? 'disabled-btn' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                        ${isLimitReached ? 'disabled' : ''}>
-                        ✨ ${isLimitReached ? 'Limit Reached' : 'Create Script'}
-                    </button>
-                `;
-                ideasOutput.appendChild(ideaCard);
-                
-                if (!isLimitReached) {
-                    ideaCard.querySelector('.create-script-btn').onclick = (e) => generateScript(e.currentTarget, idea.title, idea.concept);
-                }
-            });
-        } catch (error) { displayError(ideasOutput, error, handleGenerateIdeas);
-        } finally {
-            studioLoadingSpinner.classList.add('hidden');
-            generateIdeasBtn.disabled = false;
-        }
-    }
-    generateIdeasBtn.addEventListener('click', handleGenerateIdeas);
-
-    // Generate Script
-    async function generateScript(button, title, concept) {
-        if (DEMO_MODE) {
-            scriptOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-blue-400 mb-4">Generated Script: "${title}"</h4><pre class="whitespace-pre-wrap font-sans text-gray-300">**Scene 1:**\nVISUAL: Close up on a sleek, new product box. Hands enter frame and cleanly slice the seal.\n\n**Scene 2:**\nVISUAL: Box opens in slow-motion, revealing the gadget inside.</pre><div class="mt-4 flex gap-2 flex-wrap"><button id="generate-captions-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">✨ Generate Captions</button><button id="generate-thumbnail-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">🎨 Generate Thumbnail</button></div></div>`;
-            document.getElementById('generate-captions-btn').onclick = () => generateCaptions(title, concept);
-            document.getElementById('generate-thumbnail-btn').onclick = () => generateThumbnail(title, concept);
-            scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-        }
-        if (scriptGenerationCount >= SCRIPT_LIMIT) return;
-
-        scriptOutput.innerHTML = ''; captionsOutput.innerHTML = ''; thumbnailOutput.innerHTML = '';
-        studioLoadingSpinner.classList.remove('hidden'); 
-        button.disabled = true;
-        
-        const scriptPrompt = `Create a short, 15-second video script for an Instagram Reel titled "${title}" with concept: "${concept}". Format it with scene numbers, visual descriptions, and text/voiceover.`;
-        
-        try {
-            const scriptText = await generateText(scriptPrompt);
-            
-            scriptGenerationCount++;
-            localStorage.setItem('karnishhScriptCount', scriptGenerationCount);
-            updateUsageDisplays();
-
-            const capLimitReached = captionGenerationCount >= CAPTION_LIMIT;
-            const thumbLimitReached = thumbnailGenerationCount >= THUMBNAIL_LIMIT;
-
-            scriptOutput.innerHTML = `
-                <div class="idea-card mt-6">
-                    <h4 class="text-2xl font-bold text-blue-400 mb-4">Generated Script: "${title}"</h4>
-                    <pre class="whitespace-pre-wrap font-sans text-gray-300">${scriptText}</pre>
-                    <div class="mt-4 flex gap-2 flex-wrap">
-                        <button id="generate-captions-btn" class="${capLimitReached ? 'disabled-btn' : 'bg-yellow-500 hover:bg-yellow-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors" ${capLimitReached ? 'disabled' : ''}>
-                           ✨ ${capLimitReached ? 'Limit Reached' : 'Generate Captions'}
-                        </button>
-                        <button id="generate-thumbnail-btn" class="${thumbLimitReached ? 'disabled-btn' : 'bg-pink-500 hover:bg-pink-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors" ${thumbLimitReached ? 'disabled' : ''}>
-                           🎨 ${thumbLimitReached ? 'Limit Reached' : 'Generate Thumbnail'}
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            if (!capLimitReached) document.getElementById('generate-captions-btn').onclick = () => generateCaptions(title, concept);
-            if (!thumbLimitReached) document.getElementById('generate-thumbnail-btn').onclick = () => generateThumbnail(title, concept);
-
-            scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            if (scriptGenerationCount >= SCRIPT_LIMIT) {
-                document.querySelectorAll('.create-script-btn').forEach(btn => {
-                    btn.disabled = true;
-                    btn.textContent = '✨ Limit Reached';
-                    btn.classList.add('disabled-btn');
-                });
-            }
-
-        } catch (error) {
-             displayError(scriptOutput, error, () => generateScript(button, title, concept));
-             button.disabled = false;
-        } finally {
-            studioLoadingSpinner.classList.add('hidden');
-        }
-    }
-
-    // Generate Captions & Hashtags
-    async function generateCaptions(title, concept) {
-        if (DEMO_MODE) {
-            captionsOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-yellow-400 mb-4">Generated Captions & Hashtags</h4><pre class="whitespace-pre-wrap font-sans text-gray-300">**Option 1 (Excited):**\nIt's finally here! Unboxing the new [Gadget Name]. The hype is REAL. 🔥\n\n**Option 2 (Question):**\nNew tech just dropped! What's the first thing you'd do with this? 🤔 Let me know below! 👇\n\n#gadget #unboxing #techtok #newtech #asmr</pre></div>`;
-            captionsOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-        }
-        if (captionGenerationCount >= CAPTION_LIMIT) return;
-        
-        captionsOutput.innerHTML = '';
-        studioLoadingSpinner.classList.remove('hidden');
-        const captionBtn = document.getElementById('generate-captions-btn');
-        if(captionBtn) captionBtn.disabled = true;
-
-        const captionPrompt = `You're a top social media marketer. For a Reel titled "${title}" about "${concept}", generate 3 distinct caption options (witty, inspirational, question-based). Include a block of 5-7 relevant, high-traffic hashtags.`;
-
-        try {
-            const captionText = await generateText(captionPrompt);
-            
-            captionGenerationCount++;
-            localStorage.setItem('karnishhCaptionCount', captionGenerationCount);
-            updateUsageDisplays();
-
-            captionsOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-yellow-400 mb-4">Generated Captions & Hashtags</h4><pre class="whitespace-pre-wrap font-sans text-gray-300">${captionText}</pre></div>`;
-            captionsOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            if(captionBtn && captionGenerationCount >= CAPTION_LIMIT) {
-                captionBtn.textContent = '✨ Limit Reached';
-                captionBtn.classList.add('disabled-btn');
-            }
-
-        } catch (error) {
-             displayError(captionsOutput, error, () => generateCaptions(title, concept));
-             if (captionBtn) captionBtn.disabled = false;
-        } finally {
-            studioLoadingSpinner.classList.add('hidden');
-        }
-    }
-
-    // Generate Thumbnail
-    async function generateThumbnail(title, concept) {
-         if (DEMO_MODE) {
-            thumbnailOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-pink-400 mb-4">Generated Thumbnail Idea</h4><img src="https://placehold.co/512x512/1e3a8a/FFFFFF?text=Demo+Thumbnail" alt="Demo Thumbnail" class="w-full max-w-sm mx-auto rounded-lg mt-2"></div>`;
-            thumbnailOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return;
-        }
-        if (thumbnailGenerationCount >= THUMBNAIL_LIMIT) return;
-        
-        thumbnailOutput.innerHTML = '';
-        studioLoadingSpinner.classList.remove('hidden');
-        const thumbBtn = document.getElementById('generate-thumbnail-btn');
-        if(thumbBtn) thumbBtn.disabled = true;
-
-        const thumbPrompt = `Create a visually stunning, clickable YouTube thumbnail concept for a video titled "${title}" about "${concept}". Focus on a single, clear subject, vibrant colors, and dynamic composition. Minimal text.`;
-
-        try {
-            const imageUrl = await generateImage(thumbPrompt);
-            
-            thumbnailGenerationCount++;
-            localStorage.setItem('karnishhThumbnailCount', thumbnailGenerationCount);
-            updateUsageDisplays();
-
-            thumbnailOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-pink-400 mb-4">Generated Thumbnail Idea</h4><img src="${imageUrl}" alt="AI Generated Thumbnail" class="w-full max-w-sm mx-auto rounded-lg mt-2 shadow-lg"></div>`;
-            thumbnailOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            if(thumbBtn && thumbnailGenerationCount >= THUMBNAIL_LIMIT) {
-                thumbBtn.textContent = '🎨 Limit Reached';
-                thumbBtn.classList.add('disabled-btn');
-            }
-
-        } catch (error) {
-             displayError(thumbnailOutput, error, () => generateThumbnail(title, concept));
-             if (thumbBtn) thumbBtn.disabled = false;
-        } finally {
-            studioLoadingSpinner.classList.add('hidden');
-        }
     }
   </script>
 </body>
