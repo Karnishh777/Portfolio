@@ -4,249 +4,318 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Karnishh Videography</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* Custom font */
     body {
       font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
-      color: #e0e0e0;
-      transition: background 0.3s, color 0.3s;
     }
-    body.light {
-      background: #ffffff;
-      color: #1a1a1a;
+    /* Custom animation for the header title */
+    @keyframes pulse-glow {
+      0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 0 10px #38b6ff, 0 0 20px #38b6ff, 0 0 30px #38b6ff;
+      }
+      50% {
+        transform: scale(1.03);
+        text-shadow: 0 0 20px #38b6ff, 0 0 30px #38b6ff, 0 0 40px #38b6ff;
+      }
     }
-    header {
-      background: linear-gradient(135deg, #1c1c1c, #2e2e2e);
-      text-align: center;
-      padding: 2rem;
-      animation: fadeSlide 1s ease-in-out;
+    .title-animate {
+      animation: pulse-glow 2.5s infinite ease-in-out;
     }
-    @keyframes fadeSlide {
-      0% { opacity: 0; transform: translateY(-30px); }
-      100% { opacity: 1; transform: translateY(0); }
+    /* Style for the AI generated idea cards */
+    .idea-card {
+        background-color: #1e3a8a; /* A darker shade of blue */
+        border: 1px solid #38b6ff;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        box-shadow: 0 4px 15px rgba(56, 182, 255, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    body.light header {
-      background: #f5f5f5;
+    .idea-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(56, 182, 255, 0.2);
     }
-    header img {
-      max-height: 200px;
-      margin-bottom: 2rem;
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
     }
-    header h1 {
-      font-size: 3rem;
-      color: #ff9800;
-      letter-spacing: 2px;
-      margin-bottom: 0.5rem;
-      animation: pulse 2s infinite;
+    ::-webkit-scrollbar-track {
+        background: #0a192f;
     }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    ::-webkit-scrollbar-thumb {
+        background: #38b6ff;
+        border-radius: 4px;
     }
-    nav {
-      background: #121212;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      animation: slideDown 1s ease-in;
-    }
-    @keyframes slideDown {
-      0% { transform: translateY(-100%); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-    nav a {
-      color: #e0e0e0;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s, transform 0.2s;
-    }
-    nav a:hover {
-      color: #ff9800;
-      transform: scale(1.1);
-    }
-    section {
-      padding: 2rem 1rem;
-      max-width: 900px;
-      margin: auto;
-      animation: fadeIn 1s ease-in;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .reel-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-      animation: fadeIn 1s ease-in;
-    }
-    iframe {
-      width: 100%;
-      aspect-ratio: 9 / 16;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    footer {
-      background: #121212;
-      color: #999;
-      text-align: center;
-      padding: 1rem;
-    }
-    .theme-toggle, .go-top {
-      position: fixed;
-      padding: 0.5rem 1rem;
-      background: #ff9800;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: transform 0.3s;
-      z-index: 1001;
-    }
-    .theme-toggle {
-      top: 10px;
-      right: 10px;
-    }
-    .go-top {
-      bottom: 20px;
-      right: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.3s ease;
-    }
-    .go-top.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-    .theme-toggle:hover, .go-top:hover {
-      transform: scale(1.05);
-    }
-    form {
-      margin-top: 1rem;
-    }
-    input, textarea, button[type="submit"] {
-      width: 100%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    button[type="submit"] {
-      background: #ff9800;
-      color: white;
-      cursor: pointer;
+    ::-webkit-scrollbar-thumb:hover {
+        background: #64cfff;
     }
   </style>
 </head>
-<body>
-  <script src="script.js"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  <button class="theme-toggle" onclick="document.body.classList.toggle('light')">Toggle Theme</button>
-  <button id="goTopBtn" class="go-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Top</button>
+<body class="bg-gray-900 text-gray-200 transition-colors duration-500" id="body-light-check">
+  <!-- THEME TOGGLE BUTTON -->
+  <button id="theme-toggle" class="fixed top-4 right-4 z-50 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-transform transform hover:scale-110">
+    <svg id="theme-icon-light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+    <svg id="theme-icon-dark" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+  </button>
 
-  <header>
-    <img src="https://dynamic.brandcrowd.com/asset/logodraft/e3a12577-cc7e-468d-9b12-228c4c39d9d4?v=4&dimensionsType=preview_image_solid_with_buffer&outputFormat=png&s=ezvzZ4eunB3JpNKE9IFuKPz2JA9jjbVzpsjS%2bbj76B0%3d" alt="Karnishh Logo">
-    <h1>Karnishh Videography</h1>
-    <p>Crafting Reels That Resonate</p>
+  <!-- GO TO TOP BUTTON -->
+  <button id="goTopBtn" class="fixed bottom-5 right-5 z-50 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-opacity opacity-0 pointer-events-none">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+  </button>
+
+  <!-- HEADER -->
+  <header class="bg-gray-900/70 backdrop-blur-sm text-center py-12 px-4 border-b border-blue-800">
+    <img src="https://placehold.co/400x150/0a192f/38b6ff?text=Karnishh&font=montserrat" alt="Karnishh Logo" class="mx-auto mb-6 h-24 w-auto rounded-lg">
+    <h1 class="text-5xl font-bold text-blue-400 title-animate">Karnishh Videography</h1>
+    <p class="text-gray-400 mt-2 text-lg">Crafting Reels That Resonate</p>
   </header>
 
-  <nav>
-    <a href="#dashboard">Home</a>
-    <a href="#description">About</a>
-    <a href="#works">Works</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#contact">Contact</a>
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-40 bg-gray-800/80 backdrop-blur-md shadow-lg py-4">
+    <div class="container mx-auto flex justify-center items-center gap-6 md:gap-8">
+      <a href="#home" class="text-gray-300 hover:text-blue-400 transition font-semibold">Home</a>
+      <a href="#about" class="text-gray-300 hover:text-blue-400 transition font-semibold">About</a>
+      <a href="#works" class="text-gray-300 hover:text-blue-400 transition font-semibold">Works</a>
+      <a href="#ai-spark" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Spark</a>
+      <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition font-semibold">Pricing</a>
+      <a href="#contact" class="text-gray-300 hover:text-blue-400 transition font-semibold">Contact</a>
+    </div>
   </nav>
 
-  <section id="dashboard">
-    <h2>Welcome to Karnishh Videography</h2>
-    <img src="https://images.unsplash.com/photo-1612849319390-c6c9e8a57f73" alt="Editing Studio" style="width:100%; border-radius: 10px; margin: 1rem 0;">
-    <p>Explore my creative world—from storytelling mastery to AI-enhanced edits, made to dominate digital platforms.</p>
-  </section>
+  <!-- MAIN CONTENT -->
+  <main class="container mx-auto p-4 md:p-8">
+    
+    <!-- HOME SECTION -->
+    <section id="home" class="text-center my-16">
+      <h2 class="text-4xl font-bold text-blue-400 mb-4">Welcome to My Creative World</h2>
+      <img src="https://images.unsplash.com/photo-1574717547378-676b1a7370a2?q=80&w=2070&auto=format&fit=crop" alt="Editing Studio" style="width:100%; border-radius: 10px; margin: 1rem 0;" class="rounded-lg shadow-2xl mx-auto max-w-4xl">
+      <p class="max-w-3xl mx-auto mt-4 text-lg text-gray-400">Explore my universe of visual storytelling—from powerful narratives to AI-enhanced edits, engineered to captivate and dominate on digital platforms.</p>
+    </section>
+    
+    <!-- ABOUT SECTION -->
+    <section id="about" class="my-16">
+        <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">About Me</h2>
+        <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2">
+                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px;" loop autoplay></lottie-player>
+            </div>
+            <div class="md:w-1/2">
+                <p class="text-lg mb-6 text-gray-300">I’m Karnishh, a visionary reel editor specializing in cinematic storytelling and advanced AI tools. My edits are sharp, fast-paced, and engineered for virality, all while ensuring zero copyright issues.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-3"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/DaVinci_Resolve_Studio.png" alt="Davinci Logo" class="w-6 h-6 object-contain"> <span class="font-semibold">Davinci Resolve & Premiere Pro</span></li>
+                    <li class="flex items-center gap-3"><img src="https://placehold.co/24x24/38b6ff/FFFFFF?text=AI" alt="AI Icon" class="w-6 h-6 rounded"> <span class="font-semibold">Advanced AI Tooling</span></li>
+                    <li class="flex items-center gap-3"><img src="https://placehold.co/24x24/38b6ff/FFFFFF?text=CC" alt="Copyright Icon" class="w-6 h-6 rounded"> <span class="font-semibold">Zero Copyright Content</span></li>
+                    <li class="flex items-center gap-3"><img src="https://placehold.co/24x24/38b6ff/FFFFFF?text=C" alt="Color Grade Icon" class="w-6 h-6 rounded"> <span class="font-semibold">Cinematic Color Grading</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-  <section id="description">
-    <h2>About Me</h2>
-    <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tll0j4bb.json" background="transparent" speed="1" style="width: 100%; max-width: 400px;" loop autoplay></lottie-player>
-    <p>I’m Karnishh, a visionary reel editor. I specialize in cinematic storytelling, advanced AI tools, and zero-copyright content. My edits are sharp, fast-paced, and built to go viral.</p>
-    <ul>
-      <li><img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/DaVinci_Resolve_Studio.png" alt="Davinci Logo" style="width:24px;vertical-align:middle;"> Davinci Resolve</li>
-      <li><img width="20" src="https://static.vecteezy.com/system/resources/previews/056/850/746/non_2x/adobe-premiere-pro-logo-with-transparent-background-free-png.png">Premiere pro</li>
-      <li><img width="20" src="https://cdn.dribbble.com/userupload/41733502/file/original-ccc23ee95e65de2f7dfc54d81b8db6f4.png">Storytelling</li>
-      <li><img width="10" src="https://www.shutterstock.com/image-vector/ai-generate-logo-artificial-intelligence-600nw-2519534733.jpg" alt="AI" style="width:24px;vertical-align:middle;"> Usage of AI</li>
-      <li><img width="10" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJvGlHlUbQpSWaneXMmKkn4HOgdEmtymAypg&s">Zero Copyrights</li>
-      <li><img width="20" src="https://upload.wikimedia.org/wikipedia/commons/4/4d/DaVinci_Resolve_Studio.png" alt="Davinci Logo" style="width:24px;vertical-align:middle;">Color Grading</li>
-    </ul>
-  </section>
+    <!-- WORKS SECTION -->
+    <section id="works" class="my-16">
+        <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">My Work</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Placeholder for Instagram Reels -->
+            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
+            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
+            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
+            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
+        </div>
+    </section>
 
-  <section id="works">
-    <h2>My Work</h2>
-    <div class="reel-container">
-      <iframe src="https://www.instagram.com/reel/DJEmc-EyI2Z/embed" ></iframe>
-      <iframe src="https://www.instagram.com/reel/DIx1ZkUSza4/embed" allowfullscreen></iframe>
-      <iframe src="https://www.instagram.com/reel/DKU0eNxS6Gc/embed" allowfullscreen></iframe>
-      <iframe src="https://www.instagram.com/reel/DJJ9iFzysUl/embed" allowfullscreen></iframe>
-    </div>
-  </section>
+    <!-- AI SPARK SECTION -->
+    <section id="ai-spark" class="my-16 text-center">
+        <h2 class="text-4xl font-bold text-blue-400 mb-4">AI Reel Spark</h2>
+        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Stuck on an idea? Enter a topic and let AI generate creative concepts for your next viral reel.</p>
+        <div class="max-w-2xl mx-auto">
+            <div class="flex gap-2">
+                <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
+                <button id="generate-ideas-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                    Generate
+                </button>
+            </div>
+            <div id="ideas-output" class="mt-8 text-left">
+                <!-- AI generated content will appear here -->
+            </div>
+             <div id="loading-spinner" class="hidden mt-8">
+                <div class="flex justify-center items-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="pricing">
-    <h2>Pricing & Packages</h2>
-    <img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png" alt="Pricing Icon" style="width: 50px;">
-    <p>I offer premium reel editing services tailored for creators, influencers, and brands who want to stand out. Each video is edited with precision, using top tools and zero-copyright resources. Fast delivery and AI-optimized flow come standard.</p>
-    <ul>
-      <li>Basic Edit – ₹799</li>
-      <li>Advanced Edit with AI – ₹999</li>
-      <li>Monthly Creator Pack – ₹5999 (8 reels)</li>
-      <li>For custom plans contact us</li>
-    </ul>
-  </section>
+    <!-- PRICING SECTION -->
+    <section id="pricing" class="my-16">
+        <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">Pricing & Packages</h2>
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Basic Package -->
+            <div class="bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
+                <h3 class="text-2xl font-bold mb-4">Basic Edit</h3>
+                <p class="text-5xl font-bold mb-4 text-blue-400">₹799</p>
+                <p class="text-gray-400 mb-6">per reel</p>
+                <ul class="text-left space-y-2 text-gray-300">
+                    <li>✓ Standard Cuts & Transitions</li>
+                    <li>✓ Royalty-Free Music</li>
+                    <li>✓ 2 Day Delivery</li>
+                </ul>
+            </div>
+            <!-- Advanced Package -->
+            <div class="bg-blue-900 p-8 rounded-lg border-2 border-blue-500 text-center relative overflow-hidden">
+                <span class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</span>
+                <h3 class="text-2xl font-bold mb-4">Advanced Edit</h3>
+                <p class="text-5xl font-bold mb-4 text-blue-400">₹999</p>
+                <p class="text-gray-400 mb-6">per reel</p>
+                <ul class="text-left space-y-2 text-gray-300">
+                    <li>✓ Everything in Basic</li>
+                    <li>✓ Advanced AI Effects</li>
+                    <li>✓ Custom Sound Design</li>
+                    <li>✓ Cinematic Color Grade</li>
+                </ul>
+            </div>
+            <!-- Creator Pack -->
+            <div class="bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
+                <h3 class="text-2xl font-bold mb-4">Creator Pack</h3>
+                <p class="text-5xl font-bold mb-4 text-blue-400">₹5999</p>
+                <p class="text-gray-400 mb-6">monthly</p>
+                <ul class="text-left space-y-2 text-gray-300">
+                    <li>✓ 8 Advanced Reels</li>
+                    <li>✓ Priority Support</li>
+                    <li>✓ Strategy Consultation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <img src="https://cdn-icons-png.flaticon.com/512/552/552486.png" alt="Contact Icon" style="width: 40px;">
-    <p>Email: <a href="mailto:karnishhvjs10b@gmail.com">karnishhvjs10b@gmail.com</a></p>
-    <p>Phone: <a href="tel:+919342603979">+91 93426 03979</a></p>
-    <form onsubmit="return redirectToGmail();">
-      <label>Name:</label><br>
-      <input type="text" id="userName" placeholder="Your Name" required><br>
-      <label>Message:</label><br>
-      <textarea id="userMessage" placeholder="Your message" required></textarea><br>
-      <button type="submit">Book a Call</button>
-    </form>
-  </section>
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="my-16 text-center">
+        <h2 class="text-4xl font-bold text-blue-400 mb-4">Let's Create Together</h2>
+        <p class="text-gray-400 mb-2">Email: <a href="mailto:karnishhvjs10b@gmail.com" class="text-blue-400 hover:underline">karnishhvjs10b@gmail.com</a></p>
+        <p class="text-gray-400 mb-8">Phone: <a href="tel:+919342603979" class="text-blue-400 hover:underline">+91 93426 03979</a></p>
+        <form onsubmit="return redirectToGmail();" class="max-w-lg mx-auto">
+            <input type="text" id="userName" placeholder="Your Name" required class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <textarea id="userMessage" placeholder="Your message or project idea" required class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 mb-4 h-32 focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">Book a Call</button>
+        </form>
+    </section>
 
-  <footer>
-    <p>&copy; 2025 Karnishh Videography</p>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 border-t border-blue-800 text-center p-6">
+    <p class="text-gray-500">&copy; 2025 Karnishh Videography. All Rights Reserved.</p>
   </footer>
 
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <script>
-    const goTopBtn = document.getElementById('goTopBtn');
-    window.addEventListener('scroll', () => {
-      goTopBtn.classList.toggle('visible', window.scrollY > 200);
+    // --- Theme Toggle ---
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const body = document.getElementById('body-light-check');
+    const lightIcon = document.getElementById('theme-icon-light');
+    const darkIcon = document.getElementById('theme-icon-dark');
+    
+    themeToggleBtn.addEventListener('click', () => {
+        body.classList.toggle('bg-gray-100');
+        body.classList.toggle('text-gray-800');
+        body.classList.toggle('bg-gray-900');
+        body.classList.toggle('text-gray-200');
+
+        lightIcon.classList.toggle('hidden');
+        darkIcon.classList.toggle('hidden');
     });
 
+    // --- Go To Top Button ---
+    const goTopBtn = document.getElementById('goTopBtn');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            goTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+        } else {
+            goTopBtn.classList.add('opacity-0', 'pointer-events-none');
+        }
+    });
+    goTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // --- Smooth Scrolling for Nav Links ---
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            document.querySelector(targetId).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // --- Contact Form ---
     function redirectToGmail() {
-      const name = document.getElementById('userName').value;
-      const message = document.getElementById('userMessage').value;
-      const subject = encodeURIComponent("Call Request from " + name);
-      const body = encodeURIComponent(message);
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
-      window.open(gmailUrl, '_blank');
-      return false;
+        const name = document.getElementById('userName').value;
+        const message = document.getElementById('userMessage').value;
+        const subject = encodeURIComponent("Call Request from " + name);
+        const body = encodeURIComponent(message);
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
+        window.open(gmailUrl, '_blank');
+        return false;
     }
+
+    // --- Gemini AI Idea Generator ---
+    const generateBtn = document.getElementById('generate-ideas-btn');
+    const ideaPromptInput = document.getElementById('idea-prompt');
+    const ideasOutput = document.getElementById('ideas-output');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    generateBtn.addEventListener('click', async () => {
+        const promptText = ideaPromptInput.value;
+        if (!promptText) {
+            ideasOutput.innerHTML = `<p class="text-red-400">Please enter a topic first.</p>`;
+            return;
+        }
+
+        ideasOutput.innerHTML = '';
+        loadingSpinner.classList.remove('hidden');
+        generateBtn.disabled = true;
+
+        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the following topic: "${promptText}". For each idea, provide a catchy title, a short concept, and a suggestion for visual style. Format the output as simple HTML with h3 for the title and p for concept and style.`;
+        
+        let chatHistory = [];
+        chatHistory.push({ role: "user", parts: [{ text: fullPrompt }] });
+        const payload = { contents: chatHistory };
+        const apiKey = ""; // API key is handled by the environment
+        const apiUrl = \`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\${apiKey}\`;
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates.length > 0) {
+                const text = result.candidates[0].content.parts[0].text;
+                // Sanitize the HTML slightly before inserting
+                const sanitizedHtml = text.replace(/<h3>/g, '<h3 class="text-xl font-bold text-blue-400 mt-4">')
+                                          .replace(/<p>/g, '<p class="text-gray-300 mb-2">');
+                ideasOutput.innerHTML = sanitizedHtml;
+            } else {
+                ideasOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. Please try again.</p>`;
+                console.error('API Error:', result);
+            }
+
+        } catch (error) {
+            console.error('Fetch Error:', error);
+            ideasOutput.innerHTML = `<p class="text-red-400">Failed to connect to the AI service. Check the console for details.</p>`;
+        } finally {
+            loadingSpinner.classList.add('hidden');
+            generateBtn.disabled = false;
+        }
+    });
+
   </script>
 </body>
 </html>
