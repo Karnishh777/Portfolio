@@ -10,6 +10,7 @@
     /* Custom font */
     body {
       font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden; /* Prevents horizontal scrollbar from appearing */
     }
     /* Custom animation for the header title */
     @keyframes pulse-glow {
@@ -52,6 +53,14 @@
     }
     ::-webkit-scrollbar-thumb:hover {
         background: #64cfff;
+    }
+    /* Aspect ratio for reels */
+    .reel-iframe {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -119,32 +128,36 @@
     <section id="works" class="my-16">
         <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">My Work</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Placeholder for Instagram Reels -->
-            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
-            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
-            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
-            <div class="aspect-w-9 aspect-h-16 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable<br><small>(Embeds may be restricted)</small></span></div>
+            <!-- Replace these with your actual Instagram Reel embed codes -->
+            <iframe class="reel-iframe" src="https://www.instagram.com/reel/CqZQX0_g9vA/embed" allowfullscreen></iframe>
+            <iframe class="reel-iframe" src="https://www.instagram.com/reel/Cr_qZ0_g5F4/embed" allowfullscreen></iframe>
+            <!-- Example of a placeholder if a reel is unavailable -->
+            <div class="w-full aspect-[9/16] bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable</span></div>
+            <div class="w-full aspect-[9/16] bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable</span></div>
         </div>
     </section>
 
     <!-- AI SPARK SECTION -->
     <section id="ai-spark" class="my-16 text-center">
-        <h2 class="text-4xl font-bold text-blue-400 mb-4">AI Reel Spark</h2>
-        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Stuck on an idea? Enter a topic and let AI generate creative concepts for your next viral reel.</p>
+        <h2 class="text-4xl font-bold text-blue-400 mb-4">AI Reel Spark & Script</h2>
+        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Stuck on an idea? Enter a topic to get reel concepts, then instantly generate a script for your favorite one.</p>
         <div class="max-w-2xl mx-auto">
             <div class="flex gap-2">
                 <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
-                <button id="generate-ideas-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
-                    Generate
+                <button id="generate-ideas-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                    ✨ Generate
                 </button>
             </div>
-            <div id="ideas-output" class="mt-8 text-left">
-                <!-- AI generated content will appear here -->
-            </div>
-             <div id="loading-spinner" class="hidden mt-8">
+            <div id="loading-spinner" class="hidden mt-8">
                 <div class="flex justify-center items-center">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
                 </div>
+            </div>
+            <div id="ideas-output" class="mt-8 text-left">
+                <!-- AI generated ideas will appear here -->
+            </div>
+            <div id="script-output" class="mt-8 text-left">
+                <!-- AI generated script will appear here -->
             </div>
         </div>
     </section>
@@ -231,7 +244,6 @@
     // --- Go To Top Button ---
     const goTopBtn = document.getElementById('goTopBtn');
     window.addEventListener('scroll', () => {
-        // Check scroll position for cross-browser compatibility
         const scrolled = document.body.scrollTop > 300 || document.documentElement.scrollTop > 300;
         if (scrolled) {
             goTopBtn.classList.remove('opacity-0', 'pointer-events-none');
@@ -256,23 +268,43 @@
 
     // --- Contact Form ---
     function redirectToGmail() {
-        // Note: This function opens a new tab. If it doesn't work,
-        // it may be blocked by your browser's pop-up blocker.
         const name = document.getElementById('userName').value;
         const message = document.getElementById('userMessage').value;
         const subject = encodeURIComponent("Call Request from " + name);
         const body = encodeURIComponent(message);
         const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
         window.open(gmailUrl, '_blank');
-        return false; // Prevents the default form submission
+        return false;
     }
 
-    // --- Gemini AI Idea Generator ---
+    // --- Gemini AI Idea and Script Generator ---
     const generateBtn = document.getElementById('generate-ideas-btn');
     const ideaPromptInput = document.getElementById('idea-prompt');
     const ideasOutput = document.getElementById('ideas-output');
+    const scriptOutput = document.getElementById('script-output');
     const loadingSpinner = document.getElementById('loading-spinner');
 
+    const apiKey = ""; // API key is handled by the environment
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+    // Function to call Gemini API
+    async function callGemini(prompt) {
+        const payload = {
+            contents: [{ role: "user", parts: [{ text: prompt }] }]
+        };
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (result.candidates && result.candidates.length > 0) {
+            return result.candidates[0].content.parts[0].text;
+        }
+        throw new Error('No content generated or API error.');
+    }
+    
+    // Generate Ideas
     generateBtn.addEventListener('click', async () => {
         const promptText = ideaPromptInput.value;
         if (!promptText) {
@@ -281,44 +313,64 @@
         }
 
         ideasOutput.innerHTML = '';
+        scriptOutput.innerHTML = '';
         loadingSpinner.classList.remove('hidden');
         generateBtn.disabled = true;
 
-        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the following topic: "${promptText}". For each idea, provide a catchy title, a short concept, and a suggestion for visual style. Format the output as simple HTML with h3 for the title and p for concept and style.`;
-        
-        let chatHistory = [];
-        chatHistory.push({ role: "user", parts: [{ text: fullPrompt }] });
-        const payload = { contents: chatHistory };
-        const apiKey = ""; // API key is handled by the environment
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a JSON array of objects.`;
 
         try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
-            
-            if (result.candidates && result.candidates.length > 0) {
-                const text = result.candidates[0].content.parts[0].text;
-                // Sanitize the HTML slightly before inserting
-                const sanitizedHtml = text.replace(/<h3>/g, '<h3 class="text-xl font-bold text-blue-400 mt-4">')
-                                          .replace(/<p>/g, '<p class="text-gray-300 mb-2">');
-                ideasOutput.innerHTML = sanitizedHtml;
-            } else {
-                ideasOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. Please try again.</p>`;
-                console.error('API Error:', result);
-            }
+            const resultText = await callGemini(fullPrompt);
+            const ideas = JSON.parse(resultText.replace(/```json|```/g, ''));
 
+            ideasOutput.innerHTML = ''; // Clear previous results
+            ideas.forEach(idea => {
+                const ideaCard = document.createElement('div');
+                ideaCard.className = 'idea-card';
+                ideaCard.innerHTML = `
+                    <h3 class="text-xl font-bold text-blue-400">${idea.title}</h3>
+                    <p class="text-gray-300 my-2">${idea.concept}</p>
+                    <p class="text-gray-400 text-sm"><strong>Style:</strong> ${idea.style}</p>
+                    <button class="create-script-btn mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+                        ✨ Create Script
+                    </button>
+                `;
+                ideasOutput.appendChild(ideaCard);
+                // Attach data to the button for the script generation
+                ideaCard.querySelector('.create-script-btn').onclick = () => generateScript(idea.title, idea.concept);
+            });
         } catch (error) {
             console.error('Fetch Error:', error);
-            ideasOutput.innerHTML = `<p class="text-red-400">Failed to connect to the AI service. Check the console for details.</p>`;
+            ideasOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong generating ideas. Please try again. The model may have returned invalid JSON.</p>`;
         } finally {
             loadingSpinner.classList.add('hidden');
             generateBtn.disabled = false;
         }
     });
+
+    // Generate Script for a specific idea
+    async function generateScript(title, concept) {
+        scriptOutput.innerHTML = '';
+        loadingSpinner.classList.remove('hidden'); // Show spinner for script generation
+
+        const scriptPrompt = `Create a short, engaging 15-second video script for an Instagram Reel titled "${title}" with the concept: "${concept}". The script should be easy to film. Format it clearly with scene numbers, visual descriptions, and any text on screen or voiceover.`;
+        
+        try {
+            const scriptText = await callGemini(scriptPrompt);
+            scriptOutput.innerHTML = `
+                <div class="idea-card mt-6">
+                    <h4 class="text-2xl font-bold text-green-400 mb-4">Generated Script: "${title}"</h4>
+                    <pre class="whitespace-pre-wrap font-sans text-gray-300">${scriptText}</pre>
+                </div>
+            `;
+            scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (error) {
+            console.error('Script Generation Error:', error);
+            scriptOutput.innerHTML = `<p class="text-red-400">Failed to generate the script. Please try again.</p>`;
+        } finally {
+            loadingSpinner.classList.add('hidden');
+        }
+    }
 
   </script>
 </body>
