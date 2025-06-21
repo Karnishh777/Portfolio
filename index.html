@@ -90,7 +90,7 @@
       <a href="#about" class="text-gray-300 hover:text-blue-400 transition font-semibold">About</a>
       <a href="#works" class="text-gray-300 hover:text-blue-400 transition font-semibold">Works</a>
       <a href="#ai-trends" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Trends</a>
-      <a href="#ai-script" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Script</a>
+      <a href="#ai-studio" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Studio</a>
       <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition font-semibold">Pricing</a>
       <a href="#contact" class="text-gray-300 hover:text-blue-400 transition font-semibold">Contact</a>
     </div>
@@ -154,22 +154,23 @@
         </div>
     </section>
 
-    <!-- AI SCRIPT WRITER SECTION -->
-    <section id="ai-script" class="my-16 text-center">
-        <h2 class="text-4xl font-bold text-blue-400 mb-4">AI Reel Spark & Script</h2>
-        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Stuck on an idea? Enter a topic to get reel concepts, then instantly generate a script. (Free script generations left: <span id="script-usage-count">3</span>/3)</p>
+    <!-- AI CONTENT STUDIO SECTION -->
+    <section id="ai-studio" class="my-16 text-center">
+        <h2 class="text-4xl font-bold text-blue-400 mb-4">✨ AI Content Studio</h2>
+        <p class="max-w-2xl mx-auto text-gray-400 mb-8">From idea to script to caption, generate all you need for your next viral reel. (Free script generations: <span id="script-usage-count">3</span>/3) (Free caption generations: <span id="caption-usage-count">3</span>/3)</p>
         <div class="max-w-2xl mx-auto">
             <div class="flex gap-2">
                 <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
                 <button id="generate-ideas-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                    ✨ Generate
+                    Generate Ideas
                 </button>
             </div>
-            <div id="ideas-loading-spinner" class="hidden mt-8">
+            <div id="studio-loading-spinner" class="hidden mt-8">
                 <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div></div>
             </div>
             <div id="ideas-output" class="mt-8 text-left"></div>
             <div id="script-output" class="mt-8 text-left"></div>
+            <div id="captions-output" class="mt-8 text-left"></div>
         </div>
     </section>
 
@@ -302,12 +303,31 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        const result = await response.json();
-        if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
-            return result.candidates[0].content.parts[0].text;
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            console.error("API HTTP Error:", response.status, errorBody);
+            throw new Error(`API request failed with status ${response.status}`);
         }
-        console.error("API Error or no content:", result);
-        throw new Error('No content generated or API error.');
+
+        const result = await response.json();
+
+        if (!result.candidates || result.candidates.length === 0) {
+            if (result.promptFeedback && result.promptFeedback.blockReason) {
+                console.error("API Blocked:", result.promptFeedback.blockReason);
+                throw new Error(`Your request was blocked for safety reasons (${result.promptFeedback.blockReason}). Please rephrase it.`);
+            }
+            console.error("API Error: No candidates returned.", result);
+            throw new Error('The AI did not return a response. This may be due to a network issue or the content policy.');
+        }
+
+        const candidate = result.candidates[0];
+        if (!candidate.content || !candidate.content.parts || candidate.content.parts.length === 0) {
+             console.error("API Error: Candidate has no content parts.", candidate);
+             throw new Error('The AI returned an empty response.');
+        }
+
+        return candidate.content.parts[0].text;
     }
     
     // --- Feature 1: AI Trend Spotter ---
@@ -359,7 +379,7 @@
 
         } catch (error) {
             console.error('Trend Spotter Error:', error);
-            trendsOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong spotting trends. Please try again.</p>`;
+            trendsOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. ${error.message}</p>`;
         } finally {
             trendsLoadingSpinner.classList.add('hidden');
             if (trendSpotterCount < TREND_LIMIT) {
@@ -369,22 +389,34 @@
     });
 
 
-    // --- Feature 2: AI Idea and Script Generator ---
+    // --- Feature 2: AI Content Studio ---
     const generateIdeasBtn = document.getElementById('generate-ideas-btn');
     const ideaPromptInput = document.getElementById('idea-prompt');
     const ideasOutput = document.getElementById('ideas-output');
     const scriptOutput = document.getElementById('script-output');
-    const ideasLoadingSpinner = document.getElementById('ideas-loading-spinner');
+    const captionsOutput = document.getElementById('captions-output');
+    const studioLoadingSpinner = document.getElementById('studio-loading-spinner');
+
+    // Script Usage
     const scriptUsageCountSpan = document.getElementById('script-usage-count');
-    
     const SCRIPT_LIMIT = 3;
     let scriptGenerationCount = parseInt(localStorage.getItem('karnishhScriptCount')) || 0;
+    
+    // Caption Usage
+    const captionUsageCountSpan = document.getElementById('caption-usage-count');
+    const CAPTION_LIMIT = 3;
+    let captionGenerationCount = parseInt(localStorage.getItem('karnishhCaptionCount')) || 0;
 
     function updateScriptUsageDisplay() {
         const remaining = SCRIPT_LIMIT - scriptGenerationCount;
         scriptUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
     }
+    function updateCaptionUsageDisplay() {
+        const remaining = CAPTION_LIMIT - captionGenerationCount;
+        captionUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
+    }
     updateScriptUsageDisplay();
+    updateCaptionUsageDisplay();
 
     // Generate Ideas
     generateIdeasBtn.addEventListener('click', async () => {
@@ -396,10 +428,11 @@
 
         ideasOutput.innerHTML = '';
         scriptOutput.innerHTML = '';
-        ideasLoadingSpinner.classList.remove('hidden');
+        captionsOutput.innerHTML = '';
+        studioLoadingSpinner.classList.remove('hidden');
         generateIdeasBtn.disabled = true;
 
-        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a valid JSON array of objects, where each object has "title", "concept", and "style" keys.`;
+        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a valid JSON array of objects.`;
 
         try {
             const resultText = await callGemini(fullPrompt, 'application/json');
@@ -423,27 +456,27 @@
                 ideasOutput.appendChild(ideaCard);
                 
                 if (!isLimitReached) {
-                    ideaCard.querySelector('.create-script-btn').onclick = () => generateScript(idea.title, idea.concept);
+                    ideaCard.querySelector('.create-script-btn').onclick = (e) => generateScript(e.currentTarget, idea.title, idea.concept);
                 }
             });
         } catch (error) {
             console.error('Fetch Error:', error);
-            ideasOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong generating ideas. Please try again or rephrase your topic.</p>`;
+            const errorMessage = (error instanceof SyntaxError) ? 'Sorry, the AI returned an invalid format. Please try your request again.' : `Sorry, something went wrong. ${error.message}`;
+            ideasOutput.innerHTML = `<p class="text-red-400">${errorMessage}</p>`;
         } finally {
-            ideasLoadingSpinner.classList.add('hidden');
+            studioLoadingSpinner.classList.add('hidden');
             generateIdeasBtn.disabled = false;
         }
     });
 
     // Generate Script
-    async function generateScript(title, concept) {
-        if (scriptGenerationCount >= SCRIPT_LIMIT) {
-            scriptOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your free script generation limit.</p>`;
-            return;
-        }
+    async function generateScript(button, title, concept) {
+        if (scriptGenerationCount >= SCRIPT_LIMIT) return;
 
         scriptOutput.innerHTML = '';
-        ideasLoadingSpinner.classList.remove('hidden'); 
+        captionsOutput.innerHTML = '';
+        studioLoadingSpinner.classList.remove('hidden'); 
+        button.disabled = true;
         
         const scriptPrompt = `Create a short, engaging 15-second video script for an Instagram Reel titled "${title}" with the concept: "${concept}". The script should be easy to film. Format it clearly with scene numbers, visual descriptions, and any text on screen or voiceover.`;
         
@@ -454,12 +487,23 @@
             localStorage.setItem('karnishhScriptCount', scriptGenerationCount);
             updateScriptUsageDisplay();
 
+            const isCaptionLimitReached = captionGenerationCount >= CAPTION_LIMIT;
+
             scriptOutput.innerHTML = `
                 <div class="idea-card mt-6">
                     <h4 class="text-2xl font-bold text-green-400 mb-4">Generated Script: "${title}"</h4>
                     <pre class="whitespace-pre-wrap font-sans text-gray-300">${scriptText}</pre>
+                    <button id="generate-captions-btn" class="mt-4 ${isCaptionLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                        ${isCaptionLimitReached ? 'disabled' : ''}>
+                        ✨ ${isCaptionLimitReached ? 'Limit Reached' : 'Generate Captions'}
+                    </button>
                 </div>
             `;
+
+            if (!isCaptionLimitReached) {
+                document.getElementById('generate-captions-btn').onclick = () => generateCaptions(title, concept);
+            }
+
             scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
             if (scriptGenerationCount >= SCRIPT_LIMIT) {
@@ -473,9 +517,49 @@
 
         } catch (error) {
             console.error('Script Generation Error:', error);
-            scriptOutput.innerHTML = `<p class="text-red-400">Failed to generate the script. Please try again.</p>`;
+            scriptOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. ${error.message}</p>`;
         } finally {
-            ideasLoadingSpinner.classList.add('hidden');
+            studioLoadingSpinner.classList.add('hidden');
+        }
+    }
+
+    // Generate Captions & Hashtags
+    async function generateCaptions(title, concept) {
+        if (captionGenerationCount >= CAPTION_LIMIT) return;
+        
+        captionsOutput.innerHTML = '';
+        studioLoadingSpinner.classList.remove('hidden');
+        const captionBtn = document.getElementById('generate-captions-btn');
+        if(captionBtn) captionBtn.disabled = true;
+
+        const captionPrompt = `You are an expert social media marketer. For an Instagram Reel titled "${title}" about "${concept}", generate 3 distinct and engaging caption options. Each option should have a different tone (e.g., one witty, one inspirational, one question-based). Include a block of 5-7 relevant, high-traffic hashtags at the end.`;
+
+        try {
+            const captionText = await callGemini(captionPrompt);
+            
+            captionGenerationCount++;
+            localStorage.setItem('karnishhCaptionCount', captionGenerationCount);
+            updateCaptionUsageDisplay();
+
+            captionsOutput.innerHTML = `
+                <div class="idea-card mt-6">
+                    <h4 class="text-2xl font-bold text-yellow-400 mb-4">Generated Captions & Hashtags</h4>
+                    <pre class="whitespace-pre-wrap font-sans text-gray-300">${captionText}</pre>
+                </div>
+            `;
+            captionsOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            if(captionBtn && captionGenerationCount >= CAPTION_LIMIT){
+                captionBtn.textContent = '✨ Limit Reached';
+                captionBtn.classList.add('bg-gray-500', 'cursor-not-allowed');
+                captionBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+            }
+
+        } catch (error) {
+            console.error('Caption Generation Error:', error);
+            captionsOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. ${error.message}</p>`;
+        } finally {
+            studioLoadingSpinner.classList.add('hidden');
         }
     }
 
