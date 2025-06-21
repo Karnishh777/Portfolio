@@ -89,8 +89,7 @@
       <a href="#home" class="text-gray-300 hover:text-blue-400 transition font-semibold">Home</a>
       <a href="#about" class="text-gray-300 hover:text-blue-400 transition font-semibold">About</a>
       <a href="#works" class="text-gray-300 hover:text-blue-400 transition font-semibold">Works</a>
-      <a href="#ai-trends" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Trends</a>
-      <a href="#ai-studio" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Studio</a>
+      <a href="#ai-suite" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Suite</a>
       <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition font-semibold">Pricing</a>
       <a href="#contact" class="text-gray-300 hover:text-blue-400 transition font-semibold">Contact</a>
     </div>
@@ -102,7 +101,6 @@
     <!-- HOME SECTION -->
     <section id="home" class="text-center my-16">
       <h2 class="text-4xl font-bold text-blue-400 mb-4">Welcome to My Creative World</h2>
-      <img src="https://images.unsplash.com/photo-1574717547378-676b1a7370a2?q=80&w=2070&auto=format&fit=crop" alt="Editing Studio" style="width:100%; border-radius: 10px; margin: 1rem 0;" class="rounded-lg shadow-2xl mx-auto max-w-4xl">
       <p class="max-w-3xl mx-auto mt-4 text-lg text-gray-400">Explore my universe of visual storytelling—from powerful narratives to AI-enhanced edits, engineered to captivate and dominate on digital platforms.</p>
     </section>
     
@@ -136,41 +134,47 @@
         </div>
     </section>
 
-    <!-- AI TREND SPOTTER SECTION -->
-    <section id="ai-trends" class="my-16 text-center">
-        <h2 class="text-4xl font-bold text-blue-400 mb-4">✨ AI Trend Spotter</h2>
-        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Get ahead of the curve. Enter your niche to discover the latest Instagram Reel trends, powered by AI. (Free uses left: <span id="trend-usage-count">5</span>/5)</p>
-        <div class="max-w-2xl mx-auto">
-            <div class="flex gap-2">
-                <input type="text" id="niche-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'fashion', 'tech', 'food'">
-                <button id="spot-trends-btn" class="bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
-                    Spot Trends
-                </button>
+    <!-- AI SUITE SECTION -->
+    <section id="ai-suite" class="my-16 text-center">
+        <h2 class="text-4xl font-bold text-blue-400 mb-8">✨ AI Suite</h2>
+        <div class="space-y-12">
+            <!-- AI Trend Spotter -->
+            <div class="p-8 bg-gray-800/50 border border-purple-800 rounded-lg">
+                <h3 class="text-3xl font-bold text-purple-400 mb-4">AI Trend Spotter</h3>
+                <p class="max-w-2xl mx-auto text-gray-400 mb-8">Enter your niche to discover the latest Instagram Reel trends. (Free uses: <span id="trend-usage-count">5</span>/5)</p>
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex gap-2">
+                        <input type="text" id="niche-prompt" class="w-full bg-gray-800 border border-purple-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none" placeholder="e.g., 'fashion', 'tech', 'food'">
+                        <button id="spot-trends-btn" class="bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+                            Spot Trends
+                        </button>
+                    </div>
+                    <div id="trends-loading-spinner" class="hidden mt-8">
+                        <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div></div>
+                    </div>
+                    <div id="trends-output" class="mt-8 text-left"></div>
+                </div>
             </div>
-            <div id="trends-loading-spinner" class="hidden mt-8">
-                <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div></div>
-            </div>
-            <div id="trends-output" class="mt-8 text-left"></div>
-        </div>
-    </section>
 
-    <!-- AI CONTENT STUDIO SECTION -->
-    <section id="ai-studio" class="my-16 text-center">
-        <h2 class="text-4xl font-bold text-blue-400 mb-4">✨ AI Content Studio</h2>
-        <p class="max-w-2xl mx-auto text-gray-400 mb-8">From idea to script to caption, generate all you need for your next viral reel. (Free script generations: <span id="script-usage-count">3</span>/3) (Free caption generations: <span id="caption-usage-count">3</span>/3)</p>
-        <div class="max-w-2xl mx-auto">
-            <div class="flex gap-2">
-                <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
-                <button id="generate-ideas-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                    Generate Ideas
-                </button>
+            <!-- AI Content Studio -->
+            <div class="p-8 bg-gray-800/50 border border-green-800 rounded-lg">
+                 <h3 class="text-3xl font-bold text-green-400 mb-4">AI Content Studio</h3>
+                 <p class="max-w-2xl mx-auto text-gray-400 mb-8">From idea to script to caption, generate all you need for your next viral reel. <br>(Scripts: <span id="script-usage-count">3</span>/3) (Captions: <span id="caption-usage-count">3</span>/3)</p>
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex gap-2">
+                        <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-green-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
+                        <button id="generate-ideas-btn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+                            Generate Ideas
+                        </button>
+                    </div>
+                    <div id="studio-loading-spinner" class="hidden mt-8">
+                        <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400"></div></div>
+                    </div>
+                    <div id="ideas-output" class="mt-8 text-left"></div>
+                    <div id="script-output" class="mt-8 text-left"></div>
+                    <div id="captions-output" class="mt-8 text-left"></div>
+                </div>
             </div>
-            <div id="studio-loading-spinner" class="hidden mt-8">
-                <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div></div>
-            </div>
-            <div id="ideas-output" class="mt-8 text-left"></div>
-            <div id="script-output" class="mt-8 text-left"></div>
-            <div id="captions-output" class="mt-8 text-left"></div>
         </div>
     </section>
 
@@ -290,46 +294,82 @@
     const apiKey = ""; // API key is handled by the environment
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
-    // Reusable Function to call Gemini API
+    // Reusable and more robust function to call Gemini API
     async function callGemini(prompt, responseMimeType = 'text/plain') {
+        // Simple sanitization of the user input part of the prompt
+        const sanitizedPrompt = prompt.replace(/[<>"']/g, '');
+
         const payload = {
-            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            contents: [{ role: "user", parts: [{ text: sanitizedPrompt }] }],
             generationConfig: {
                 responseMimeType,
             }
         };
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-        if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("API HTTP Error:", response.status, errorBody);
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (!result.candidates || result.candidates.length === 0) {
-            if (result.promptFeedback && result.promptFeedback.blockReason) {
-                console.error("API Blocked:", result.promptFeedback.blockReason);
-                throw new Error(`Your request was blocked for safety reasons (${result.promptFeedback.blockReason}). Please rephrase it.`);
+            if (!response.ok) {
+                const errorBody = await response.json().catch(() => response.text());
+                console.error("API HTTP Error:", response.status, errorBody);
+                throw new Error(`The AI service returned an error (HTTP ${response.status}). Please try again later.`);
             }
-            console.error("API Error: No candidates returned.", result);
-            throw new Error('The AI did not return a response. This may be due to a network issue or the content policy.');
-        }
 
-        const candidate = result.candidates[0];
-        if (!candidate.content || !candidate.content.parts || candidate.content.parts.length === 0) {
-             console.error("API Error: Candidate has no content parts.", candidate);
-             throw new Error('The AI returned an empty response.');
-        }
+            const result = await response.json();
 
-        return candidate.content.parts[0].text;
+            if (!result.candidates || result.candidates.length === 0) {
+                if (result.promptFeedback && result.promptFeedback.blockReason) {
+                    console.error("API Blocked:", result.promptFeedback.blockReason, result.promptFeedback.safetyRatings);
+                    throw new Error(`Your request was blocked for safety reasons (${result.promptFeedback.blockReason}). Please try a different topic.`);
+                }
+                console.error("API Error: No candidates returned.", result);
+                throw new Error('The AI did not return a valid response. Please try again.');
+            }
+
+            const candidate = result.candidates[0];
+
+            if (candidate.finishReason && candidate.finishReason !== 'STOP') {
+                 throw new Error(`The AI stopped generating for an unexpected reason: ${candidate.finishReason}. Please try rephrasing.`);
+            }
+
+            if (!candidate.content || !candidate.content.parts || candidate.content.parts.length === 0) {
+                 console.error("API Error: Candidate has no content parts.", candidate);
+                 throw new Error('The AI returned an empty response.');
+            }
+
+            return candidate.content.parts[0].text;
+        } catch (error) {
+            // Catch network errors (e.g., no internet)
+            if (error instanceof TypeError) {
+                 console.error("Network Error:", error);
+                 throw new Error("A network error occurred. Please check your connection and try again.");
+            }
+            // Re-throw other errors (like the ones we created above)
+            throw error;
+        }
     }
     
+    // --- UI Helper for Errors ---
+    function displayError(outputElement, error, retryCallback) {
+        let retryButtonHtml = '';
+        if (retryCallback) {
+            retryButtonHtml = `<button class="retry-btn mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">Retry</button>`;
+        }
+        outputElement.innerHTML = `
+            <div class="idea-card border-red-500">
+                <p class="text-red-400 font-bold">An error occurred:</p>
+                <p class="text-gray-300 mt-2">${error.message}</p>
+                ${retryButtonHtml}
+            </div>
+        `;
+        if (retryCallback) {
+            outputElement.querySelector('.retry-btn').onclick = retryCallback;
+        }
+    }
+
     // --- Feature 1: AI Trend Spotter ---
     const spotTrendsBtn = document.getElementById('spot-trends-btn');
     const nichePromptInput = document.getElementById('niche-prompt');
@@ -352,7 +392,7 @@
     }
     updateTrendUsageDisplay();
 
-    spotTrendsBtn.addEventListener('click', async () => {
+    async function handleSpotTrends() {
         if (trendSpotterCount >= TREND_LIMIT) {
             trendsOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your trend spotting limit.</p>`;
             return;
@@ -378,15 +418,15 @@
             updateTrendUsageDisplay();
 
         } catch (error) {
-            console.error('Trend Spotter Error:', error);
-            trendsOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. ${error.message}</p>`;
+            displayError(trendsOutput, error, handleSpotTrends);
         } finally {
             trendsLoadingSpinner.classList.add('hidden');
             if (trendSpotterCount < TREND_LIMIT) {
                 spotTrendsBtn.disabled = false;
             }
         }
-    });
+    }
+    spotTrendsBtn.addEventListener('click', handleSpotTrends);
 
 
     // --- Feature 2: AI Content Studio ---
@@ -396,15 +436,13 @@
     const scriptOutput = document.getElementById('script-output');
     const captionsOutput = document.getElementById('captions-output');
     const studioLoadingSpinner = document.getElementById('studio-loading-spinner');
-
-    // Script Usage
-    const scriptUsageCountSpan = document.getElementById('script-usage-count');
-    const SCRIPT_LIMIT = 3;
-    let scriptGenerationCount = parseInt(localStorage.getItem('karnishhScriptCount')) || 0;
     
-    // Caption Usage
+    // Usage Counters
+    const scriptUsageCountSpan = document.getElementById('script-usage-count');
     const captionUsageCountSpan = document.getElementById('caption-usage-count');
+    const SCRIPT_LIMIT = 3;
     const CAPTION_LIMIT = 3;
+    let scriptGenerationCount = parseInt(localStorage.getItem('karnishhScriptCount')) || 0;
     let captionGenerationCount = parseInt(localStorage.getItem('karnishhCaptionCount')) || 0;
 
     function updateScriptUsageDisplay() {
@@ -419,7 +457,7 @@
     updateCaptionUsageDisplay();
 
     // Generate Ideas
-    generateIdeasBtn.addEventListener('click', async () => {
+    async function handleGenerateIdeas() {
         const promptText = ideaPromptInput.value;
         if (!promptText) {
             ideasOutput.innerHTML = `<p class="text-red-400">Please enter a topic first.</p>`;
@@ -432,7 +470,7 @@
         studioLoadingSpinner.classList.remove('hidden');
         generateIdeasBtn.disabled = true;
 
-        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a valid JSON array of objects.`;
+        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a valid JSON array of objects. ONLY return the JSON array, nothing else.`;
 
         try {
             const resultText = await callGemini(fullPrompt, 'application/json');
@@ -448,7 +486,7 @@
                     <h3 class="text-xl font-bold text-blue-400">${idea.title}</h3>
                     <p class="text-gray-300 my-2">${idea.concept}</p>
                     <p class="text-gray-400 text-sm"><strong>Style:</strong> ${idea.style}</p>
-                    <button class="create-script-btn mt-4 ${isLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                    <button class="create-script-btn mt-4 ${isLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
                         ${isLimitReached ? 'disabled' : ''}>
                         ✨ ${isLimitReached ? 'Limit Reached' : 'Create Script'}
                     </button>
@@ -460,14 +498,13 @@
                 }
             });
         } catch (error) {
-            console.error('Fetch Error:', error);
-            const errorMessage = (error instanceof SyntaxError) ? 'Sorry, the AI returned an invalid format. Please try your request again.' : `Sorry, something went wrong. ${error.message}`;
-            ideasOutput.innerHTML = `<p class="text-red-400">${errorMessage}</p>`;
+             displayError(ideasOutput, error, handleGenerateIdeas);
         } finally {
             studioLoadingSpinner.classList.add('hidden');
             generateIdeasBtn.disabled = false;
         }
-    });
+    }
+    generateIdeasBtn.addEventListener('click', handleGenerateIdeas);
 
     // Generate Script
     async function generateScript(button, title, concept) {
@@ -491,7 +528,7 @@
 
             scriptOutput.innerHTML = `
                 <div class="idea-card mt-6">
-                    <h4 class="text-2xl font-bold text-green-400 mb-4">Generated Script: "${title}"</h4>
+                    <h4 class="text-2xl font-bold text-blue-400 mb-4">Generated Script: "${title}"</h4>
                     <pre class="whitespace-pre-wrap font-sans text-gray-300">${scriptText}</pre>
                     <button id="generate-captions-btn" class="mt-4 ${isCaptionLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
                         ${isCaptionLimitReached ? 'disabled' : ''}>
@@ -510,14 +547,14 @@
                 document.querySelectorAll('.create-script-btn').forEach(btn => {
                     btn.disabled = true;
                     btn.textContent = '✨ Limit Reached';
-                    btn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
                     btn.classList.add('bg-gray-500', 'cursor-not-allowed');
                 });
             }
 
         } catch (error) {
-            console.error('Script Generation Error:', error);
-            scriptOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. ${error.message}</p>`;
+             displayError(scriptOutput, error, () => generateScript(button, title, concept));
+             button.disabled = false; // Re-enable original button on error
         } finally {
             studioLoadingSpinner.classList.add('hidden');
         }
@@ -556,8 +593,7 @@
             }
 
         } catch (error) {
-            console.error('Caption Generation Error:', error);
-            captionsOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong. ${error.message}</p>`;
+             displayError(captionsOutput, error, () => generateCaptions(title, concept));
         } finally {
             studioLoadingSpinner.classList.add('hidden');
         }
