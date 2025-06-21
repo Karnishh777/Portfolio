@@ -85,11 +85,12 @@
 
   <!-- NAVIGATION -->
   <nav class="sticky top-0 z-40 bg-gray-800/80 backdrop-blur-md shadow-lg py-4">
-    <div class="container mx-auto flex justify-center items-center gap-6 md:gap-8">
+    <div class="container mx-auto flex justify-center items-center flex-wrap gap-4 md:gap-8">
       <a href="#home" class="text-gray-300 hover:text-blue-400 transition font-semibold">Home</a>
       <a href="#about" class="text-gray-300 hover:text-blue-400 transition font-semibold">About</a>
       <a href="#works" class="text-gray-300 hover:text-blue-400 transition font-semibold">Works</a>
-      <a href="#ai-spark" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Spark</a>
+      <a href="#ai-trends" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Trends</a>
+      <a href="#ai-script" class="text-gray-300 hover:text-blue-400 transition font-semibold">AI Script</a>
       <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition font-semibold">Pricing</a>
       <a href="#contact" class="text-gray-300 hover:text-blue-400 transition font-semibold">Contact</a>
     </div>
@@ -128,19 +129,35 @@
     <section id="works" class="my-16">
         <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">My Work</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Replace these with your actual Instagram Reel embed codes -->
             <iframe class="reel-iframe" src="https://www.instagram.com/reel/CqZQX0_g9vA/embed" allowfullscreen></iframe>
             <iframe class="reel-iframe" src="https://www.instagram.com/reel/Cr_qZ0_g5F4/embed" allowfullscreen></iframe>
-            <!-- Example of a placeholder if a reel is unavailable -->
             <div class="w-full aspect-[9/16] bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable</span></div>
             <div class="w-full aspect-[9/16] bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-center p-4"><span>Reel Preview Unavailable</span></div>
         </div>
     </section>
 
-    <!-- AI SPARK SECTION -->
-    <section id="ai-spark" class="my-16 text-center">
+    <!-- AI TREND SPOTTER SECTION -->
+    <section id="ai-trends" class="my-16 text-center">
+        <h2 class="text-4xl font-bold text-blue-400 mb-4">✨ AI Trend Spotter</h2>
+        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Get ahead of the curve. Enter your niche to discover the latest Instagram Reel trends, powered by AI. (Free uses left: <span id="trend-usage-count">5</span>/5)</p>
+        <div class="max-w-2xl mx-auto">
+            <div class="flex gap-2">
+                <input type="text" id="niche-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'fashion', 'tech', 'food'">
+                <button id="spot-trends-btn" class="bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+                    Spot Trends
+                </button>
+            </div>
+            <div id="trends-loading-spinner" class="hidden mt-8">
+                <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div></div>
+            </div>
+            <div id="trends-output" class="mt-8 text-left"></div>
+        </div>
+    </section>
+
+    <!-- AI SCRIPT WRITER SECTION -->
+    <section id="ai-script" class="my-16 text-center">
         <h2 class="text-4xl font-bold text-blue-400 mb-4">AI Reel Spark & Script</h2>
-        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Stuck on an idea? Enter a topic to get reel concepts, then instantly generate a script for your favorite one.</p>
+        <p class="max-w-2xl mx-auto text-gray-400 mb-8">Stuck on an idea? Enter a topic to get reel concepts, then instantly generate a script. (Free script generations left: <span id="script-usage-count">3</span>/3)</p>
         <div class="max-w-2xl mx-auto">
             <div class="flex gap-2">
                 <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-blue-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
@@ -148,17 +165,11 @@
                     ✨ Generate
                 </button>
             </div>
-            <div id="loading-spinner" class="hidden mt-8">
-                <div class="flex justify-center items-center">
-                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
-                </div>
+            <div id="ideas-loading-spinner" class="hidden mt-8">
+                <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div></div>
             </div>
-            <div id="ideas-output" class="mt-8 text-left">
-                <!-- AI generated ideas will appear here -->
-            </div>
-            <div id="script-output" class="mt-8 text-left">
-                <!-- AI generated script will appear here -->
-            </div>
+            <div id="ideas-output" class="mt-8 text-left"></div>
+            <div id="script-output" class="mt-8 text-left"></div>
         </div>
     </section>
 
@@ -166,7 +177,6 @@
     <section id="pricing" class="my-16">
         <h2 class="text-4xl font-bold text-center text-blue-400 mb-8">Pricing & Packages</h2>
         <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Basic Package -->
             <div class="bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
                 <h3 class="text-2xl font-bold mb-4">Basic Edit</h3>
                 <p class="text-5xl font-bold mb-4 text-blue-400">₹799</p>
@@ -177,7 +187,6 @@
                     <li>✓ 2 Day Delivery</li>
                 </ul>
             </div>
-            <!-- Advanced Package -->
             <div class="bg-blue-900 p-8 rounded-lg border-2 border-blue-500 text-center relative overflow-hidden">
                 <span class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</span>
                 <h3 class="text-2xl font-bold mb-4">Advanced Edit</h3>
@@ -190,7 +199,6 @@
                     <li>✓ Cinematic Color Grade</li>
                 </ul>
             </div>
-            <!-- Creator Pack -->
             <div class="bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
                 <h3 class="text-2xl font-bold mb-4">Creator Pack</h3>
                 <p class="text-5xl font-bold mb-4 text-blue-400">₹5999</p>
@@ -277,20 +285,17 @@
         return false;
     }
 
-    // --- Gemini AI Idea and Script Generator ---
-    const generateBtn = document.getElementById('generate-ideas-btn');
-    const ideaPromptInput = document.getElementById('idea-prompt');
-    const ideasOutput = document.getElementById('ideas-output');
-    const scriptOutput = document.getElementById('script-output');
-    const loadingSpinner = document.getElementById('loading-spinner');
-
+    // --- Gemini AI Features ---
     const apiKey = ""; // API key is handled by the environment
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
-    // Function to call Gemini API
-    async function callGemini(prompt) {
+    // Reusable Function to call Gemini API
+    async function callGemini(prompt, responseMimeType = 'text/plain') {
         const payload = {
-            contents: [{ role: "user", parts: [{ text: prompt }] }]
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: {
+                responseMimeType,
+            }
         };
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -298,14 +303,91 @@
             body: JSON.stringify(payload)
         });
         const result = await response.json();
-        if (result.candidates && result.candidates.length > 0) {
+        if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
             return result.candidates[0].content.parts[0].text;
         }
+        console.error("API Error or no content:", result);
         throw new Error('No content generated or API error.');
     }
     
+    // --- Feature 1: AI Trend Spotter ---
+    const spotTrendsBtn = document.getElementById('spot-trends-btn');
+    const nichePromptInput = document.getElementById('niche-prompt');
+    const trendsOutput = document.getElementById('trends-output');
+    const trendsLoadingSpinner = document.getElementById('trends-loading-spinner');
+    const trendUsageCountSpan = document.getElementById('trend-usage-count');
+
+    const TREND_LIMIT = 5;
+    let trendSpotterCount = parseInt(localStorage.getItem('karnishhTrendCount')) || 0;
+
+    function updateTrendUsageDisplay() {
+        const remaining = TREND_LIMIT - trendSpotterCount;
+        trendUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
+        if (remaining <= 0) {
+            spotTrendsBtn.disabled = true;
+            spotTrendsBtn.textContent = 'Limit Reached';
+            spotTrendsBtn.classList.add('bg-gray-500', 'cursor-not-allowed');
+            spotTrendsBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+        }
+    }
+    updateTrendUsageDisplay();
+
+    spotTrendsBtn.addEventListener('click', async () => {
+        if (trendSpotterCount >= TREND_LIMIT) {
+            trendsOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your trend spotting limit.</p>`;
+            return;
+        }
+
+        const niche = nichePromptInput.value || 'general social media';
+        
+        trendsOutput.innerHTML = '';
+        trendsLoadingSpinner.classList.remove('hidden');
+        spotTrendsBtn.disabled = true;
+
+        const month = new Date().toLocaleString('default', { month: 'long' });
+        const year = new Date().getFullYear();
+        
+        const trendsPrompt = `As an expert social media strategist, identify the top 3 Instagram Reel trends for ${month} ${year}. For each trend, provide a name, a brief description, and a creative example of how it could be applied to the '${niche}' niche. Format the output clearly with headings for each trend.`;
+
+        try {
+            const resultText = await callGemini(trendsPrompt);
+            trendsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">${resultText}</pre></div>`;
+            
+            trendSpotterCount++;
+            localStorage.setItem('karnishhTrendCount', trendSpotterCount);
+            updateTrendUsageDisplay();
+
+        } catch (error) {
+            console.error('Trend Spotter Error:', error);
+            trendsOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong spotting trends. Please try again.</p>`;
+        } finally {
+            trendsLoadingSpinner.classList.add('hidden');
+            if (trendSpotterCount < TREND_LIMIT) {
+                spotTrendsBtn.disabled = false;
+            }
+        }
+    });
+
+
+    // --- Feature 2: AI Idea and Script Generator ---
+    const generateIdeasBtn = document.getElementById('generate-ideas-btn');
+    const ideaPromptInput = document.getElementById('idea-prompt');
+    const ideasOutput = document.getElementById('ideas-output');
+    const scriptOutput = document.getElementById('script-output');
+    const ideasLoadingSpinner = document.getElementById('ideas-loading-spinner');
+    const scriptUsageCountSpan = document.getElementById('script-usage-count');
+    
+    const SCRIPT_LIMIT = 3;
+    let scriptGenerationCount = parseInt(localStorage.getItem('karnishhScriptCount')) || 0;
+
+    function updateScriptUsageDisplay() {
+        const remaining = SCRIPT_LIMIT - scriptGenerationCount;
+        scriptUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
+    }
+    updateScriptUsageDisplay();
+
     // Generate Ideas
-    generateBtn.addEventListener('click', async () => {
+    generateIdeasBtn.addEventListener('click', async () => {
         const promptText = ideaPromptInput.value;
         if (!promptText) {
             ideasOutput.innerHTML = `<p class="text-red-400">Please enter a topic first.</p>`;
@@ -314,49 +396,64 @@
 
         ideasOutput.innerHTML = '';
         scriptOutput.innerHTML = '';
-        loadingSpinner.classList.remove('hidden');
-        generateBtn.disabled = true;
+        ideasLoadingSpinner.classList.remove('hidden');
+        generateIdeasBtn.disabled = true;
 
-        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a JSON array of objects.`;
+        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a valid JSON array of objects, where each object has "title", "concept", and "style" keys.`;
 
         try {
-            const resultText = await callGemini(fullPrompt);
-            const ideas = JSON.parse(resultText.replace(/```json|```/g, ''));
+            const resultText = await callGemini(fullPrompt, 'application/json');
+            const ideas = JSON.parse(resultText);
 
-            ideasOutput.innerHTML = ''; // Clear previous results
+            ideasOutput.innerHTML = ''; 
             ideas.forEach(idea => {
                 const ideaCard = document.createElement('div');
                 ideaCard.className = 'idea-card';
+                const isLimitReached = scriptGenerationCount >= SCRIPT_LIMIT;
+                
                 ideaCard.innerHTML = `
                     <h3 class="text-xl font-bold text-blue-400">${idea.title}</h3>
                     <p class="text-gray-300 my-2">${idea.concept}</p>
                     <p class="text-gray-400 text-sm"><strong>Style:</strong> ${idea.style}</p>
-                    <button class="create-script-btn mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
-                        ✨ Create Script
+                    <button class="create-script-btn mt-4 ${isLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                        ${isLimitReached ? 'disabled' : ''}>
+                        ✨ ${isLimitReached ? 'Limit Reached' : 'Create Script'}
                     </button>
                 `;
                 ideasOutput.appendChild(ideaCard);
-                // Attach data to the button for the script generation
-                ideaCard.querySelector('.create-script-btn').onclick = () => generateScript(idea.title, idea.concept);
+                
+                if (!isLimitReached) {
+                    ideaCard.querySelector('.create-script-btn').onclick = () => generateScript(idea.title, idea.concept);
+                }
             });
         } catch (error) {
             console.error('Fetch Error:', error);
-            ideasOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong generating ideas. Please try again. The model may have returned invalid JSON.</p>`;
+            ideasOutput.innerHTML = `<p class="text-red-400">Sorry, something went wrong generating ideas. Please try again or rephrase your topic.</p>`;
         } finally {
-            loadingSpinner.classList.add('hidden');
-            generateBtn.disabled = false;
+            ideasLoadingSpinner.classList.add('hidden');
+            generateIdeasBtn.disabled = false;
         }
     });
 
-    // Generate Script for a specific idea
+    // Generate Script
     async function generateScript(title, concept) {
-        scriptOutput.innerHTML = '';
-        loadingSpinner.classList.remove('hidden'); // Show spinner for script generation
+        if (scriptGenerationCount >= SCRIPT_LIMIT) {
+            scriptOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your free script generation limit.</p>`;
+            return;
+        }
 
+        scriptOutput.innerHTML = '';
+        ideasLoadingSpinner.classList.remove('hidden'); 
+        
         const scriptPrompt = `Create a short, engaging 15-second video script for an Instagram Reel titled "${title}" with the concept: "${concept}". The script should be easy to film. Format it clearly with scene numbers, visual descriptions, and any text on screen or voiceover.`;
         
         try {
             const scriptText = await callGemini(scriptPrompt);
+            
+            scriptGenerationCount++;
+            localStorage.setItem('karnishhScriptCount', scriptGenerationCount);
+            updateScriptUsageDisplay();
+
             scriptOutput.innerHTML = `
                 <div class="idea-card mt-6">
                     <h4 class="text-2xl font-bold text-green-400 mb-4">Generated Script: "${title}"</h4>
@@ -364,11 +461,21 @@
                 </div>
             `;
             scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            if (scriptGenerationCount >= SCRIPT_LIMIT) {
+                document.querySelectorAll('.create-script-btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.textContent = '✨ Limit Reached';
+                    btn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    btn.classList.add('bg-gray-500', 'cursor-not-allowed');
+                });
+            }
+
         } catch (error) {
             console.error('Script Generation Error:', error);
             scriptOutput.innerHTML = `<p class="text-red-400">Failed to generate the script. Please try again.</p>`;
         } finally {
-            loadingSpinner.classList.add('hidden');
+            ideasLoadingSpinner.classList.add('hidden');
         }
     }
 
