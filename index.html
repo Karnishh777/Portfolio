@@ -28,7 +28,7 @@
     }
     /* Style for the AI generated idea cards */
     .idea-card {
-        background-color: #1e3a8a; /* A darker shade of blue */
+        background-color: rgba(30, 64, 175, 0.3); /* Darker blue with opacity */
         border: 1px solid #38b6ff;
         border-radius: 0.75rem;
         padding: 1.5rem;
@@ -61,6 +61,11 @@
       border: none;
       border-radius: 0.5rem;
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    /* Disabled button style */
+    .disabled-btn {
+        background-color: #4a5568 !important;
+        cursor: not-allowed !important;
     }
   </style>
 </head>
@@ -138,18 +143,32 @@
     <section id="ai-suite" class="my-16 text-center">
         <h2 class="text-4xl font-bold text-blue-400 mb-8">✨ AI Suite</h2>
         
-        <!-- Important Notice for Local Development -->
-        <div id="local-server-notice" class="max-w-3xl mx-auto p-4 mb-8 bg-yellow-900/50 border border-yellow-700 rounded-lg text-left relative">
-            <button onclick="document.getElementById('local-server-notice').style.display='none'" class="absolute top-2 right-3 text-yellow-400 hover:text-white text-2xl leading-none">&times;</button>
-            <h4 class="font-bold text-yellow-300">Important: Running This Page</h4>
-            <p class="text-yellow-400 text-sm mt-1">
-                For the AI features to work, this HTML file must be run from a web server, not opened directly from your computer's file system (i.e., not using a `file:///` URL). This is due to browser security policies.
-                <br>
-                <strong>Easy Solution:</strong> If you are using an editor like VS Code, install the "Live Server" extension, right-click this file, and choose "Open with Live Server".
+        <div id="api-key-notice" class="max-w-3xl mx-auto p-4 mb-8 bg-red-900/50 border border-red-700 rounded-lg text-left hidden">
+            <h4 class="font-bold text-red-300">API Key Error - Running in Demo Mode</h4>
+            <p class="text-red-400 text-sm mt-1">
+                The AI features could not be activated due to a permission error with the API key (HTTP 403). This usually means the **Generative Language API** is not enabled in the associated Google Cloud project. You can explore the features below using pre-made examples.
             </p>
         </div>
-
+        
         <div class="space-y-12">
+            <!-- AI Location Scout -->
+            <div class="p-8 bg-gray-800/50 border border-cyan-800 rounded-lg">
+                <h3 class="text-3xl font-bold text-cyan-400 mb-4">AI Location Scout</h3>
+                <p class="max-w-2xl mx-auto text-gray-400 mb-8">Describe a scene, and our AI will suggest real filming locations. (Free uses: <span id="location-usage-count">5</span>/5)</p>
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex gap-2">
+                        <input type="text" id="scene-prompt" class="w-full bg-gray-800 border border-cyan-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 focus:outline-none" placeholder="e.g., 'historic temple background in Madurai'">
+                        <button id="find-locations-btn" class="bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-cyan-700 transition-colors flex items-center gap-2">
+                            Scout
+                        </button>
+                    </div>
+                    <div id="locations-loading-spinner" class="hidden mt-8">
+                        <div class="flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div></div>
+                    </div>
+                    <div id="locations-output" class="mt-8 text-left"></div>
+                </div>
+            </div>
+
             <!-- AI Trend Spotter -->
             <div class="p-8 bg-gray-800/50 border border-purple-800 rounded-lg">
                 <h3 class="text-3xl font-bold text-purple-400 mb-4">AI Trend Spotter</h3>
@@ -171,7 +190,7 @@
             <!-- AI Content Studio -->
             <div class="p-8 bg-gray-800/50 border border-green-800 rounded-lg">
                  <h3 class="text-3xl font-bold text-green-400 mb-4">AI Content Studio</h3>
-                 <p class="max-w-2xl mx-auto text-gray-400 mb-8">From idea to script to caption, generate all you need for your next viral reel. <br>(Scripts: <span id="script-usage-count">3</span>/3) (Captions: <span id="caption-usage-count">3</span>/3)</p>
+                 <p class="max-w-2xl mx-auto text-gray-400 mb-8">From idea to script to caption, generate all you need for your next viral reel. <br>(Scripts: <span id="script-usage-count">3</span>/3) (Captions: <span id="caption-usage-count">3</span>/3) (Thumbnails: <span id="thumbnail-usage-count">3</span>/3)</p>
                 <div class="max-w-2xl mx-auto">
                     <div class="flex gap-2">
                         <input type="text" id="idea-prompt" class="w-full bg-gray-800 border border-green-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="e.g., 'Unboxing a new gadget'">
@@ -185,6 +204,7 @@
                     <div id="ideas-output" class="mt-8 text-left"></div>
                     <div id="script-output" class="mt-8 text-left"></div>
                     <div id="captions-output" class="mt-8 text-left"></div>
+                    <div id="thumbnail-output" class="mt-8 text-left"></div>
                 </div>
             </div>
         </div>
@@ -250,6 +270,9 @@
 
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <script>
+    // --- Global Config ---
+    let DEMO_MODE = false;
+
     // --- Theme Toggle ---
     const themeToggleBtn = document.getElementById('theme-toggle');
     const body = document.getElementById('body-light-check');
@@ -257,37 +280,25 @@
     const darkIcon = document.getElementById('theme-icon-dark');
     
     themeToggleBtn.addEventListener('click', () => {
-        body.classList.toggle('bg-gray-100');
-        body.classList.toggle('text-gray-800');
-        body.classList.toggle('bg-gray-900');
-        body.classList.toggle('text-gray-200');
-
-        lightIcon.classList.toggle('hidden');
-        darkIcon.classList.toggle('hidden');
+        body.classList.toggle('bg-gray-100'); body.classList.toggle('text-gray-800');
+        body.classList.toggle('bg-gray-900'); body.classList.toggle('text-gray-200');
+        lightIcon.classList.toggle('hidden'); darkIcon.classList.toggle('hidden');
     });
 
     // --- Go To Top Button ---
     const goTopBtn = document.getElementById('goTopBtn');
     window.addEventListener('scroll', () => {
         const scrolled = document.body.scrollTop > 300 || document.documentElement.scrollTop > 300;
-        if (scrolled) {
-            goTopBtn.classList.remove('opacity-0', 'pointer-events-none');
-        } else {
-            goTopBtn.classList.add('opacity-0', 'pointer-events-none');
-        }
+        if (scrolled) { goTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+        } else { goTopBtn.classList.add('opacity-0', 'pointer-events-none'); }
     });
-    goTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     
     // --- Smooth Scrolling for Nav Links ---
     document.querySelectorAll('nav a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            const targetId = this.getAttribute('href');
-            document.querySelector(targetId).scrollIntoView({
-                behavior: 'smooth'
-            });
+            document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
         });
     });
 
@@ -304,19 +315,10 @@
 
     // --- Gemini AI Features ---
     const apiKey = ""; // API key is handled by the environment
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    
+    async function callGeminiAPI(apiUrl, payload) {
+        if (DEMO_MODE) throw new Error("API key is not configured. Running in Demo Mode.");
 
-    // Reusable and more robust function to call Gemini API
-    async function callGemini(prompt, responseMimeType = 'text/plain') {
-        // Simple sanitization of the user input part of the prompt
-        const sanitizedPrompt = prompt.replace(/[<>"']/g, '');
-
-        const payload = {
-            contents: [{ role: "user", parts: [{ text: sanitizedPrompt }] }],
-            generationConfig: {
-                responseMimeType,
-            }
-        };
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -324,52 +326,57 @@
                 body: JSON.stringify(payload)
             });
 
+            if (response.status === 403) {
+                DEMO_MODE = true;
+                document.getElementById('api-key-notice').classList.remove('hidden');
+                throw new Error("API key permission error (HTTP 403). Switched to Demo Mode.");
+            }
+
             if (!response.ok) {
                 const errorBody = await response.json().catch(() => response.text());
-                console.error("API HTTP Error:", response.status, errorBody);
                 throw new Error(`The AI service returned an error (HTTP ${response.status}). Please try again later.`);
             }
 
-            const result = await response.json();
+            return await response.json();
 
-            if (!result.candidates || result.candidates.length === 0) {
-                if (result.promptFeedback && result.promptFeedback.blockReason) {
-                    console.error("API Blocked:", result.promptFeedback.blockReason, result.promptFeedback.safetyRatings);
-                    throw new Error(`Your request was blocked for safety reasons (${result.promptFeedback.blockReason}). Please try a different topic.`);
-                }
-                console.error("API Error: No candidates returned.", result);
-                throw new Error('The AI did not return a valid response. Please try again.');
-            }
-
-            const candidate = result.candidates[0];
-
-            if (candidate.finishReason && candidate.finishReason !== 'STOP') {
-                 throw new Error(`The AI stopped generating for an unexpected reason: ${candidate.finishReason}. Please try rephrasing.`);
-            }
-
-            if (!candidate.content || !candidate.content.parts || candidate.content.parts.length === 0) {
-                 console.error("API Error: Candidate has no content parts.", candidate);
-                 throw new Error('The AI returned an empty response.');
-            }
-
-            return candidate.content.parts[0].text;
         } catch (error) {
-            // Catch network errors (e.g., no internet)
             if (error instanceof TypeError) {
-                 console.error("Network Error:", error);
                  throw new Error("A network error occurred. Please check your connection and try again.");
             }
-            // Re-throw other errors (like the ones we created above)
             throw error;
         }
     }
+
+    async function generateText(prompt, responseMimeType = 'text/plain') {
+        const payload = {
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType }
+        };
+        const result = await callGeminiAPI(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, payload);
+        
+        if (!result.candidates || result.candidates.length === 0) {
+            if (result.promptFeedback?.blockReason) throw new Error(`Request blocked for safety reasons (${result.promptFeedback.blockReason}). Please try a different topic.`);
+            throw new Error('The AI did not return a valid response.');
+        }
+        const candidate = result.candidates[0];
+        if (candidate.finishReason && candidate.finishReason !== 'STOP') throw new Error(`The AI stopped for an unexpected reason: ${candidate.finishReason}.`);
+        if (!candidate.content?.parts?.[0]?.text) throw new Error('The AI returned an empty response.');
+        return candidate.content.parts[0].text;
+    }
     
+    async function generateImage(prompt) {
+        const payload = { instances: [{ prompt }], parameters: { "sampleCount": 1 } };
+        const result = await callGeminiAPI(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`, payload);
+        
+        if (!result.predictions?.[0]?.bytesBase64Encoded) {
+            throw new Error('The AI did not generate a valid image.');
+        }
+        return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+    }
+
     // --- UI Helper for Errors ---
     function displayError(outputElement, error, retryCallback) {
-        let retryButtonHtml = '';
-        if (retryCallback) {
-            retryButtonHtml = `<button class="retry-btn mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">Retry</button>`;
-        }
+        let retryButtonHtml = retryCallback ? `<button class="retry-btn mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">Retry</button>` : '';
         outputElement.innerHTML = `
             <div class="idea-card border-red-500">
                 <p class="text-red-400 font-bold">An error occurred:</p>
@@ -377,18 +384,68 @@
                 ${retryButtonHtml}
             </div>
         `;
-        if (retryCallback) {
-            outputElement.querySelector('.retry-btn').onclick = retryCallback;
-        }
+        if (retryCallback) outputElement.querySelector('.retry-btn').onclick = retryCallback;
     }
 
-    // --- Feature 1: AI Trend Spotter ---
+    // --- Feature 1: AI Location Scout ---
+    const findLocationsBtn = document.getElementById('find-locations-btn');
+    const scenePromptInput = document.getElementById('scene-prompt');
+    const locationsOutput = document.getElementById('locations-output');
+    const locationsLoadingSpinner = document.getElementById('locations-loading-spinner');
+    const locationUsageCountSpan = document.getElementById('location-usage-count');
+    const LOCATION_LIMIT = 5;
+    let locationScoutCount = parseInt(localStorage.getItem('karnishhLocationCount')) || 0;
+
+    function updateLocationUsageDisplay() {
+        const remaining = LOCATION_LIMIT - locationScoutCount;
+        locationUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
+        if (remaining <= 0) {
+            findLocationsBtn.disabled = true;
+            findLocationsBtn.textContent = 'Limit Reached';
+            findLocationsBtn.classList.add('disabled-btn');
+        }
+    }
+    updateLocationUsageDisplay();
+
+    async function handleLocationScout() {
+        if (DEMO_MODE) {
+            locationsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">**DEMO: AI Location Scout**\n\n**1. Meenakshi Amman Temple:**\nPerfect for your 'historic temple background'. The temple's ancient, intricate architecture and spiritual ambiance provide a stunning, authentic backdrop for traditional performances or cultural content.\n\n**2. Thirumalai Nayakkar Palace:**\nThe grand arches and light & sound show make this ideal for cinematic shots, historical reenactments, or creating a royal, majestic feel for your video.\n\n**3. Vaigai Dam:**\nFor a scenic, natural setting, the Vaigai Dam offers expansive water views and beautiful sunsets, perfect for drone shots, music videos, or peaceful, reflective scenes.</pre></div>`;
+            return;
+        }
+        if (locationScoutCount >= LOCATION_LIMIT) {
+            locationsOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your location scouting limit.</p>`;
+            return;
+        }
+
+        const sceneDesc = scenePromptInput.value;
+        if (!sceneDesc) { locationsOutput.innerHTML = `<p class="text-red-400">Please describe a scene first.</p>`; return; }
+        
+        locationsOutput.innerHTML = '';
+        locationsLoadingSpinner.classList.remove('hidden');
+        findLocationsBtn.disabled = true;
+
+        const locationPrompt = `As a film location scout, suggest 3 specific, real-world filming locations for a video with the following scene description: "${sceneDesc}". The user may specify a city. If so, focus on that city. For each location, briefly explain why it's a good fit for this scene.`;
+        try {
+            const resultText = await generateText(locationPrompt);
+            locationsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">${resultText}</pre></div>`;
+            locationScoutCount++;
+            localStorage.setItem('karnishhLocationCount', locationScoutCount);
+            updateLocationUsageDisplay();
+        } catch (error) { displayError(locationsOutput, error, handleLocationScout);
+        } finally {
+            locationsLoadingSpinner.classList.add('hidden');
+            if (locationScoutCount < LOCATION_LIMIT) findLocationsBtn.disabled = false;
+        }
+    }
+    findLocationsBtn.addEventListener('click', handleLocationScout);
+
+
+    // --- Feature 2: AI Trend Spotter ---
     const spotTrendsBtn = document.getElementById('spot-trends-btn');
     const nichePromptInput = document.getElementById('niche-prompt');
     const trendsOutput = document.getElementById('trends-output');
     const trendsLoadingSpinner = document.getElementById('trends-loading-spinner');
     const trendUsageCountSpan = document.getElementById('trend-usage-count');
-
     const TREND_LIMIT = 5;
     let trendSpotterCount = parseInt(localStorage.getItem('karnishhTrendCount')) || 0;
 
@@ -398,94 +455,83 @@
         if (remaining <= 0) {
             spotTrendsBtn.disabled = true;
             spotTrendsBtn.textContent = 'Limit Reached';
-            spotTrendsBtn.classList.add('bg-gray-500', 'cursor-not-allowed');
-            spotTrendsBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+            spotTrendsBtn.classList.add('disabled-btn');
         }
     }
     updateTrendUsageDisplay();
 
     async function handleSpotTrends() {
+        if (DEMO_MODE) {
+            trendsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">**DEMO: AI Trend Report**\n\n**Trend 1: "A Day in My Niche"**\nDescription: A quick-cut montage showing the behind-the-scenes of a profession in your niche.\nExample for 'fashion': Show quick cuts of sketching a design, choosing fabric, sewing, a model fitting, and the final product on a runway.\n\n**Trend 2: Point-of-View (POV) Scenarios**\nDescription: Use text overlays to create a relatable "POV:" situation for your audience.\nExample for 'fashion': "POV: You found the perfect outfit for the event." Show someone confidently walking into a party.</pre></div>`;
+            return;
+        }
         if (trendSpotterCount >= TREND_LIMIT) {
             trendsOutput.innerHTML = `<p class="text-yellow-400 text-center font-bold">You have reached your trend spotting limit.</p>`;
             return;
         }
 
         const niche = nichePromptInput.value || 'general social media';
-        
         trendsOutput.innerHTML = '';
         trendsLoadingSpinner.classList.remove('hidden');
         spotTrendsBtn.disabled = true;
 
-        const month = new Date().toLocaleString('default', { month: 'long' });
-        const year = new Date().getFullYear();
-        
-        const trendsPrompt = `As an expert social media strategist, identify the top 3 Instagram Reel trends for ${month} ${year}. For each trend, provide a name, a brief description, and a creative example of how it could be applied to the '${niche}' niche. Format the output clearly with headings for each trend.`;
-
+        const trendsPrompt = `As a top social media strategist, identify the top 3 Instagram Reel trends for this month. For each, provide a name, description, and an example for the '${niche}' niche. Format it clearly.`;
         try {
-            const resultText = await callGemini(trendsPrompt);
+            const resultText = await generateText(trendsPrompt);
             trendsOutput.innerHTML = `<div class="idea-card mt-6"><pre class="whitespace-pre-wrap font-sans text-gray-300">${resultText}</pre></div>`;
-            
             trendSpotterCount++;
             localStorage.setItem('karnishhTrendCount', trendSpotterCount);
             updateTrendUsageDisplay();
-
-        } catch (error) {
-            displayError(trendsOutput, error, handleSpotTrends);
+        } catch (error) { displayError(trendsOutput, error, handleSpotTrends);
         } finally {
             trendsLoadingSpinner.classList.add('hidden');
-            if (trendSpotterCount < TREND_LIMIT) {
-                spotTrendsBtn.disabled = false;
-            }
+            if (trendSpotterCount < TREND_LIMIT) spotTrendsBtn.disabled = false;
         }
     }
     spotTrendsBtn.addEventListener('click', handleSpotTrends);
 
-
-    // --- Feature 2: AI Content Studio ---
+    // --- Feature 3: AI Content Studio ---
     const generateIdeasBtn = document.getElementById('generate-ideas-btn');
     const ideaPromptInput = document.getElementById('idea-prompt');
     const ideasOutput = document.getElementById('ideas-output');
     const scriptOutput = document.getElementById('script-output');
     const captionsOutput = document.getElementById('captions-output');
+    const thumbnailOutput = document.getElementById('thumbnail-output');
     const studioLoadingSpinner = document.getElementById('studio-loading-spinner');
     
     // Usage Counters
     const scriptUsageCountSpan = document.getElementById('script-usage-count');
     const captionUsageCountSpan = document.getElementById('caption-usage-count');
-    const SCRIPT_LIMIT = 3;
-    const CAPTION_LIMIT = 3;
+    const thumbnailUsageCountSpan = document.getElementById('thumbnail-usage-count');
+    const SCRIPT_LIMIT = 3, CAPTION_LIMIT = 3, THUMBNAIL_LIMIT = 3;
     let scriptGenerationCount = parseInt(localStorage.getItem('karnishhScriptCount')) || 0;
     let captionGenerationCount = parseInt(localStorage.getItem('karnishhCaptionCount')) || 0;
+    let thumbnailGenerationCount = parseInt(localStorage.getItem('karnishhThumbnailCount')) || 0;
 
-    function updateScriptUsageDisplay() {
-        const remaining = SCRIPT_LIMIT - scriptGenerationCount;
-        scriptUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
+    function updateUsageDisplays() {
+        scriptUsageCountSpan.textContent = `${Math.max(0, SCRIPT_LIMIT - scriptGenerationCount)}`;
+        captionUsageCountSpan.textContent = `${Math.max(0, CAPTION_LIMIT - captionGenerationCount)}`;
+        thumbnailUsageCountSpan.textContent = `${Math.max(0, THUMBNAIL_LIMIT - thumbnailGenerationCount)}`;
     }
-    function updateCaptionUsageDisplay() {
-        const remaining = CAPTION_LIMIT - captionGenerationCount;
-        captionUsageCountSpan.textContent = `${remaining > 0 ? remaining : 0}`;
-    }
-    updateScriptUsageDisplay();
-    updateCaptionUsageDisplay();
+    updateUsageDisplays();
 
-    // Generate Ideas
     async function handleGenerateIdeas() {
-        const promptText = ideaPromptInput.value;
-        if (!promptText) {
-            ideasOutput.innerHTML = `<p class="text-red-400">Please enter a topic first.</p>`;
+        if (DEMO_MODE) {
+            ideasOutput.innerHTML = `<div class="idea-card"><h3 class="text-xl font-bold text-blue-400">DEMO: Unboxing Gadget</h3><p class="text-gray-300 my-2">A fast-paced, visually engaging unboxing of a new tech gadget, focusing on close-ups and satisfying ASMR sounds.</p><p class="text-gray-400 text-sm"><strong>Style:</strong> Sleek, modern, quick cuts</p><button class="create-script-btn mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">✨ Create Script</button></div>`;
+            ideasOutput.querySelector('.create-script-btn').onclick = (e) => generateScript(e.currentTarget, 'DEMO: Unboxing Gadget', 'A fast-paced unboxing.');
             return;
         }
+        const promptText = ideaPromptInput.value;
+        if (!promptText) { ideasOutput.innerHTML = `<p class="text-red-400">Please enter a topic first.</p>`; return; }
 
-        ideasOutput.innerHTML = '';
-        scriptOutput.innerHTML = '';
-        captionsOutput.innerHTML = '';
+        ideasOutput.innerHTML = ''; scriptOutput.innerHTML = ''; captionsOutput.innerHTML = ''; thumbnailOutput.innerHTML = '';
         studioLoadingSpinner.classList.remove('hidden');
         generateIdeasBtn.disabled = true;
 
-        const fullPrompt = `Generate 3 creative and engaging Instagram Reel ideas for the topic: "${promptText}". For each idea, provide a "title", "concept", and "style". Return this as a valid JSON array of objects. ONLY return the JSON array, nothing else.`;
+        const fullPrompt = `Generate 3 creative Instagram Reel ideas for the topic: "${promptText}". Return a valid JSON array of objects with "title", "concept", and "style" keys. ONLY return the JSON array.`;
 
         try {
-            const resultText = await callGemini(fullPrompt, 'application/json');
+            const resultText = await generateText(fullPrompt, 'application/json');
             const ideas = JSON.parse(resultText);
 
             ideasOutput.innerHTML = ''; 
@@ -498,7 +544,7 @@
                     <h3 class="text-xl font-bold text-blue-400">${idea.title}</h3>
                     <p class="text-gray-300 my-2">${idea.concept}</p>
                     <p class="text-gray-400 text-sm"><strong>Style:</strong> ${idea.style}</p>
-                    <button class="create-script-btn mt-4 ${isLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                    <button class="create-script-btn mt-4 ${isLimitReached ? 'disabled-btn' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
                         ${isLimitReached ? 'disabled' : ''}>
                         ✨ ${isLimitReached ? 'Limit Reached' : 'Create Script'}
                     </button>
@@ -509,8 +555,7 @@
                     ideaCard.querySelector('.create-script-btn').onclick = (e) => generateScript(e.currentTarget, idea.title, idea.concept);
                 }
             });
-        } catch (error) {
-             displayError(ideasOutput, error, handleGenerateIdeas);
+        } catch (error) { displayError(ideasOutput, error, handleGenerateIdeas);
         } finally {
             studioLoadingSpinner.classList.add('hidden');
             generateIdeasBtn.disabled = false;
@@ -520,38 +565,48 @@
 
     // Generate Script
     async function generateScript(button, title, concept) {
+        if (DEMO_MODE) {
+            scriptOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-blue-400 mb-4">Generated Script: "${title}"</h4><pre class="whitespace-pre-wrap font-sans text-gray-300">**Scene 1:**\nVISUAL: Close up on a sleek, new product box. Hands enter frame and cleanly slice the seal.\n\n**Scene 2:**\nVISUAL: Box opens in slow-motion, revealing the gadget inside.</pre><div class="mt-4 flex gap-2 flex-wrap"><button id="generate-captions-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">✨ Generate Captions</button><button id="generate-thumbnail-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">🎨 Generate Thumbnail</button></div></div>`;
+            document.getElementById('generate-captions-btn').onclick = () => generateCaptions(title, concept);
+            document.getElementById('generate-thumbnail-btn').onclick = () => generateThumbnail(title, concept);
+            scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
         if (scriptGenerationCount >= SCRIPT_LIMIT) return;
 
-        scriptOutput.innerHTML = '';
-        captionsOutput.innerHTML = '';
+        scriptOutput.innerHTML = ''; captionsOutput.innerHTML = ''; thumbnailOutput.innerHTML = '';
         studioLoadingSpinner.classList.remove('hidden'); 
         button.disabled = true;
         
-        const scriptPrompt = `Create a short, engaging 15-second video script for an Instagram Reel titled "${title}" with the concept: "${concept}". The script should be easy to film. Format it clearly with scene numbers, visual descriptions, and any text on screen or voiceover.`;
+        const scriptPrompt = `Create a short, 15-second video script for an Instagram Reel titled "${title}" with concept: "${concept}". Format it with scene numbers, visual descriptions, and text/voiceover.`;
         
         try {
-            const scriptText = await callGemini(scriptPrompt);
+            const scriptText = await generateText(scriptPrompt);
             
             scriptGenerationCount++;
             localStorage.setItem('karnishhScriptCount', scriptGenerationCount);
-            updateScriptUsageDisplay();
+            updateUsageDisplays();
 
-            const isCaptionLimitReached = captionGenerationCount >= CAPTION_LIMIT;
+            const capLimitReached = captionGenerationCount >= CAPTION_LIMIT;
+            const thumbLimitReached = thumbnailGenerationCount >= THUMBNAIL_LIMIT;
 
             scriptOutput.innerHTML = `
                 <div class="idea-card mt-6">
                     <h4 class="text-2xl font-bold text-blue-400 mb-4">Generated Script: "${title}"</h4>
                     <pre class="whitespace-pre-wrap font-sans text-gray-300">${scriptText}</pre>
-                    <button id="generate-captions-btn" class="mt-4 ${isCaptionLimitReached ? 'bg-gray-500 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                        ${isCaptionLimitReached ? 'disabled' : ''}>
-                        ✨ ${isCaptionLimitReached ? 'Limit Reached' : 'Generate Captions'}
-                    </button>
+                    <div class="mt-4 flex gap-2 flex-wrap">
+                        <button id="generate-captions-btn" class="${capLimitReached ? 'disabled-btn' : 'bg-yellow-500 hover:bg-yellow-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors" ${capLimitReached ? 'disabled' : ''}>
+                           ✨ ${capLimitReached ? 'Limit Reached' : 'Generate Captions'}
+                        </button>
+                        <button id="generate-thumbnail-btn" class="${thumbLimitReached ? 'disabled-btn' : 'bg-pink-500 hover:bg-pink-600'} text-white font-bold py-2 px-4 rounded-lg transition-colors" ${thumbLimitReached ? 'disabled' : ''}>
+                           🎨 ${thumbLimitReached ? 'Limit Reached' : 'Generate Thumbnail'}
+                        </button>
+                    </div>
                 </div>
             `;
 
-            if (!isCaptionLimitReached) {
-                document.getElementById('generate-captions-btn').onclick = () => generateCaptions(title, concept);
-            }
+            if (!capLimitReached) document.getElementById('generate-captions-btn').onclick = () => generateCaptions(title, concept);
+            if (!thumbLimitReached) document.getElementById('generate-thumbnail-btn').onclick = () => generateThumbnail(title, concept);
 
             scriptOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
@@ -559,14 +614,13 @@
                 document.querySelectorAll('.create-script-btn').forEach(btn => {
                     btn.disabled = true;
                     btn.textContent = '✨ Limit Reached';
-                    btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
-                    btn.classList.add('bg-gray-500', 'cursor-not-allowed');
+                    btn.classList.add('disabled-btn');
                 });
             }
 
         } catch (error) {
              displayError(scriptOutput, error, () => generateScript(button, title, concept));
-             button.disabled = false; // Re-enable original button on error
+             button.disabled = false;
         } finally {
             studioLoadingSpinner.classList.add('hidden');
         }
@@ -574,6 +628,11 @@
 
     // Generate Captions & Hashtags
     async function generateCaptions(title, concept) {
+        if (DEMO_MODE) {
+            captionsOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-yellow-400 mb-4">Generated Captions & Hashtags</h4><pre class="whitespace-pre-wrap font-sans text-gray-300">**Option 1 (Excited):**\nIt's finally here! Unboxing the new [Gadget Name]. The hype is REAL. 🔥\n\n**Option 2 (Question):**\nNew tech just dropped! What's the first thing you'd do with this? 🤔 Let me know below! 👇\n\n#gadget #unboxing #techtok #newtech #asmr</pre></div>`;
+            captionsOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
         if (captionGenerationCount >= CAPTION_LIMIT) return;
         
         captionsOutput.innerHTML = '';
@@ -581,36 +640,69 @@
         const captionBtn = document.getElementById('generate-captions-btn');
         if(captionBtn) captionBtn.disabled = true;
 
-        const captionPrompt = `You are an expert social media marketer. For an Instagram Reel titled "${title}" about "${concept}", generate 3 distinct and engaging caption options. Each option should have a different tone (e.g., one witty, one inspirational, one question-based). Include a block of 5-7 relevant, high-traffic hashtags at the end.`;
+        const captionPrompt = `You're a top social media marketer. For a Reel titled "${title}" about "${concept}", generate 3 distinct caption options (witty, inspirational, question-based). Include a block of 5-7 relevant, high-traffic hashtags.`;
 
         try {
-            const captionText = await callGemini(captionPrompt);
+            const captionText = await generateText(captionPrompt);
             
             captionGenerationCount++;
             localStorage.setItem('karnishhCaptionCount', captionGenerationCount);
-            updateCaptionUsageDisplay();
+            updateUsageDisplays();
 
-            captionsOutput.innerHTML = `
-                <div class="idea-card mt-6">
-                    <h4 class="text-2xl font-bold text-yellow-400 mb-4">Generated Captions & Hashtags</h4>
-                    <pre class="whitespace-pre-wrap font-sans text-gray-300">${captionText}</pre>
-                </div>
-            `;
+            captionsOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-yellow-400 mb-4">Generated Captions & Hashtags</h4><pre class="whitespace-pre-wrap font-sans text-gray-300">${captionText}</pre></div>`;
             captionsOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            if(captionBtn && captionGenerationCount >= CAPTION_LIMIT){
+            if(captionBtn && captionGenerationCount >= CAPTION_LIMIT) {
                 captionBtn.textContent = '✨ Limit Reached';
-                captionBtn.classList.add('bg-gray-500', 'cursor-not-allowed');
-                captionBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+                captionBtn.classList.add('disabled-btn');
             }
 
         } catch (error) {
              displayError(captionsOutput, error, () => generateCaptions(title, concept));
+             if (captionBtn) captionBtn.disabled = false;
         } finally {
             studioLoadingSpinner.classList.add('hidden');
         }
     }
 
+    // Generate Thumbnail
+    async function generateThumbnail(title, concept) {
+         if (DEMO_MODE) {
+            thumbnailOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-pink-400 mb-4">Generated Thumbnail Idea</h4><img src="https://placehold.co/512x512/1e3a8a/FFFFFF?text=Demo+Thumbnail" alt="Demo Thumbnail" class="w-full max-w-sm mx-auto rounded-lg mt-2"></div>`;
+            thumbnailOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (thumbnailGenerationCount >= THUMBNAIL_LIMIT) return;
+        
+        thumbnailOutput.innerHTML = '';
+        studioLoadingSpinner.classList.remove('hidden');
+        const thumbBtn = document.getElementById('generate-thumbnail-btn');
+        if(thumbBtn) thumbBtn.disabled = true;
+
+        const thumbPrompt = `Create a visually stunning, clickable YouTube thumbnail concept for a video titled "${title}" about "${concept}". Focus on a single, clear subject, vibrant colors, and dynamic composition. Minimal text.`;
+
+        try {
+            const imageUrl = await generateImage(thumbPrompt);
+            
+            thumbnailGenerationCount++;
+            localStorage.setItem('karnishhThumbnailCount', thumbnailGenerationCount);
+            updateUsageDisplays();
+
+            thumbnailOutput.innerHTML = `<div class="idea-card mt-6"><h4 class="text-2xl font-bold text-pink-400 mb-4">Generated Thumbnail Idea</h4><img src="${imageUrl}" alt="AI Generated Thumbnail" class="w-full max-w-sm mx-auto rounded-lg mt-2 shadow-lg"></div>`;
+            thumbnailOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            if(thumbBtn && thumbnailGenerationCount >= THUMBNAIL_LIMIT) {
+                thumbBtn.textContent = '🎨 Limit Reached';
+                thumbBtn.classList.add('disabled-btn');
+            }
+
+        } catch (error) {
+             displayError(thumbnailOutput, error, () => generateThumbnail(title, concept));
+             if (thumbBtn) thumbBtn.disabled = false;
+        } finally {
+            studioLoadingSpinner.classList.add('hidden');
+        }
+    }
   </script>
 </body>
 </html>
