@@ -142,52 +142,59 @@
         box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
     }
     
-    /* New Testimonial Slider Styles */
-    .testimonial-slider {
-        position: relative;
+    /* Testimonial Slider Styles */
+    .testimonial-slider-container {
+      position: relative;
     }
-    .testimonial-wrapper {
-        display: flex;
-        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    .testimonial-scroller {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+      scrollbar-width: none; /* For Firefox */
+      -ms-overflow-style: none; /* For Internet Explorer and Edge */
     }
-    .testimonial-card {
-        flex: 0 0 100%;
-        width: 100%;
+    .testimonial-scroller::-webkit-scrollbar {
+      display: none; /* For Chrome, Safari, and Opera */
+    }
+    .testimonial-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      scroll-snap-align: center;
+      padding: 0 0.5rem; /* Space between cards */
     }
     .slider-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        transition: all 0.3s ease;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      display: none; /* Hidden by default, shown on desktop */
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8; /* Lighter color for visibility */
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .slider-nav {
+          display: flex; /* Show arrows only on desktop */
+      }
     }
     .slider-nav:hover {
-        background: rgba(6, 182, 212, 0.2);
-        border-color: #06b6d4;
+        color: #06b6d4; /* Glow color on hover */
+        transform: translateY(-50%) scale(1.2);
     }
     .slider-nav.prev {
-        left: -60px;
+        left: -40px;
     }
     .slider-nav.next {
-        right: -60px;
+        right: -40px;
     }
-    /* Hide arrows on mobile */
-    @media (max-width: 767px) {
-        .slider-nav {
-            display: none;
-        }
-    }
-    /* Translucent overlays */
-    .testimonial-slider::before,
-    .testimonial-slider::after {
+    
+    .testimonial-slider-container::before,
+    .testimonial-slider-container::after {
         content: '';
         position: absolute;
         top: 0;
@@ -196,11 +203,11 @@
         z-index: 2;
         pointer-events: none;
     }
-    .testimonial-slider::before {
+    .testimonial-slider-container::before {
         left: 0;
         background: linear-gradient(to right, #020617, transparent);
     }
-    .testimonial-slider::after {
+    .testimonial-slider-container::after {
         right: 0;
         background: linear-gradient(to left, #020617, transparent);
     }
@@ -269,7 +276,7 @@
         <div class="z-10 px-4">
           <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold text-white leading-tight tracking-tighter scroll-animate">
             Editing Stories,<br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Frame by Frame.</span>
+            <span class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500" style="transform: translateY(-0.15em);">Frame by Frame.</span>
           </h1>
           <p class="text-slate-400 mt-6 max-w-2xl mx-auto text-lg md:text-xl scroll-animate" style="transition-delay: 200ms;">
             I am Karnishh, a video editor who transforms raw footage into compelling narratives that captivate, engage, and inspire.
@@ -411,31 +418,37 @@
 
       <!-- TESTIMONIALS SECTION -->
       <section id="testimonials" class="py-20 md:py-32">
-        <div class="container mx-auto px-6 text-center">
-          <h2 class="text-4xl md:text-5xl font-bold text-white mb-16 scroll-animate">What My Clients Say</h2>
-          <div class="testimonial-slider max-w-3xl mx-auto relative scroll-animate">
-            <div class="overflow-hidden">
-                <div id="testimonial-wrapper" class="testimonial-wrapper">
-                    <!-- Testimonial 1 -->
-                    <div class="testimonial-card glassmorphism p-8 rounded-2xl text-center">
+        <div class="container mx-auto px-6">
+          <h2 class="text-4xl md:text-5xl font-bold text-white mb-16 text-center scroll-animate">What My Clients Say</h2>
+          <div class="testimonial-slider-container max-w-3xl mx-auto relative scroll-animate">
+            <div id="testimonial-scroller" class="testimonial-scroller">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-slide">
+                    <div class="glassmorphism p-8 rounded-2xl text-center">
                         <p class="text-slate-300 text-lg italic mb-6">"Karnishh is a magician. He took our raw footage and turned it into something truly cinematic that exceeded all our expectations."</p>
                         <p class="font-bold text-cyan-400">John Doe</p>
                         <p class="text-slate-500">Brand Video Client</p>
                     </div>
-                    <!-- Testimonial 2 -->
-                    <div class="testimonial-card glassmorphism p-8 rounded-2xl text-center">
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="testimonial-slide">
+                    <div class="glassmorphism p-8 rounded-2xl text-center">
                         <p class="text-slate-300 text-lg italic mb-6">"The turnaround was incredibly fast, and the quality was top-notch. Our social media engagement has skyrocketed since we started working with him."</p>
                         <p class="font-bold text-cyan-400">Jane Smith</p>
                         <p class="text-slate-500">Social Media Manager</p>
                     </div>
-                    <!-- Testimonial 3 -->
-                    <div class="testimonial-card glassmorphism p-8 rounded-2xl text-center">
+                </div>
+                <!-- Testimonial 3 -->
+                 <div class="testimonial-slide">
+                    <div class="glassmorphism p-8 rounded-2xl text-center">
                         <p class="text-slate-300 text-lg italic mb-6">"An absolute professional. Karnishh understands storytelling on a deep level. Highly recommend for any project that needs a creative touch."</p>
                         <p class="font-bold text-cyan-400">Samuel Lee</p>
                         <p class="text-slate-500">Independent Filmmaker</p>
                     </div>
-                    <!-- Testimonial 4 -->
-                    <div class="testimonial-card glassmorphism p-8 rounded-2xl text-center">
+                </div>
+                 <!-- Testimonial 4 -->
+                 <div class="testimonial-slide">
+                    <div class="glassmorphism p-8 rounded-2xl text-center">
                         <p class="text-slate-300 text-lg italic mb-6">"His color grading skills are phenomenal. He brought a mood and feeling to our project that we didn't even know was possible."</p>
                         <p class="font-bold text-cyan-400">Priya Sharma</p>
                         <p class="text-slate-500">Corporate Comms</p>
@@ -443,32 +456,17 @@
                 </div>
             </div>
             <button class="slider-nav prev hover-target" id="prev-testimonial">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </button>
             <button class="slider-nav next hover-target" id="next-testimonial">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- FINAL CTA -->
-      <section id="final-cta" class="py-20 md:py-32 bg-slate-900/50">
-        <div class="container mx-auto px-6 text-center">
-             <h2 class="text-5xl md:text-7xl font-bold text-white leading-tight tracking-tighter scroll-animate">
-              Ready to Start<br>
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Your Masterpiece?</span>
-            </h2>
-             <div class="mt-10 scroll-animate" style="transition-delay: 200ms;">
-              <a href="#contact" class="px-10 py-5 bg-white text-slate-900 text-lg font-bold rounded-full hover:bg-slate-200 transition-all duration-300 transform hover:scale-105 hover-target">
-                Let's Talk
-              </a>
-            </div>
-        </div>
-      </section>
-
       <!-- CONTACT SECTION -->
-      <section id="contact" class="py-20 md:py-32">
+      <section id="contact" class="py-20 md:py-32 bg-slate-900/50">
         <div class="container mx-auto px-6 text-center">
           <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Let's Create Something<br>Extraordinary.</h2>
           <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-12 scroll-animate" style="transition-delay: 200ms;">
@@ -510,10 +508,10 @@
 
         function initializeSite(isDesktop) {
             // Fade out selector
-            deviceSelector.classList.add('fade-out');
+            if (deviceSelector) deviceSelector.classList.add('fade-out');
             
             // Show content
-            mainContentWrapper.classList.remove('content-hidden');
+            if (mainContentWrapper) mainContentWrapper.classList.remove('content-hidden');
 
             if (isDesktop) {
                 body.classList.add('desktop-cursor');
@@ -522,81 +520,88 @@
             
             initializeCommonFeatures();
         }
-
-        desktopBtn.addEventListener('click', () => initializeSite(true));
-        mobileBtn.addEventListener('click', () => initializeSite(false));
+        
+        if (desktopBtn && mobileBtn) {
+            desktopBtn.addEventListener('click', () => initializeSite(true));
+            mobileBtn.addEventListener('click', () => initializeSite(false));
+        } else {
+             // Fallback for safety, if selector is missing
+             const isDesktop = !/Mobi|Android|iPhone/i.test(navigator.userAgent);
+             initializeSite(isDesktop);
+        }
 
         function initializeDesktopFeatures() {
             const cursorDot = document.querySelector('.cursor-dot');
             const cursorOutline = document.querySelector('.cursor-outline');
             const customCursor = document.querySelector('.custom-cursor');
 
-            window.addEventListener('mousemove', (e) => {
-                const posX = e.clientX;
-                const posY = e.clientY;
-                cursorDot.style.left = `${posX}px`;
-                cursorDot.style.top = `${posY}px`;
-                cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: 'forwards' });
-            });
+            if (cursorDot && cursorOutline && customCursor) {
+                window.addEventListener('mousemove', (e) => {
+                    const posX = e.clientX;
+                    const posY = e.clientY;
+                    cursorDot.style.left = `${posX}px`;
+                    cursorDot.style.top = `${posY}px`;
+                    cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: 'forwards' });
+                });
 
-            document.querySelectorAll('.hover-target').forEach(el => {
-                el.addEventListener('mouseover', () => customCursor.classList.add('hovered'));
-                el.addEventListener('mouseout', () => customCursor.classList.remove('hovered'));
-            });
+                document.querySelectorAll('.hover-target').forEach(el => {
+                    el.addEventListener('mouseover', () => customCursor.classList.add('hovered'));
+                    el.addEventListener('mouseout', () => customCursor.classList.remove('hovered'));
+                });
+            }
         }
 
         function initializeCommonFeatures() {
             // Sticky Header on Scroll
             const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                header.classList.toggle('glassmorphism', window.scrollY > 50);
-            });
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    header.classList.toggle('glassmorphism', window.scrollY > 50);
+                });
+            }
 
             // Scroll Animation Logic
             const animatedElements = document.querySelectorAll('.scroll-animate');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
-                });
-            }, { threshold: 0.1 });
-            animatedElements.forEach(el => observer.observe(el));
+            if (animatedElements.length > 0) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) entry.target.classList.add('visible');
+                    });
+                }, { threshold: 0.1 });
+                animatedElements.forEach(el => observer.observe(el));
+            }
 
             // Mobile Menu Logic
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
 
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
                 });
-            });
 
-            // Testimonial Slider Logic
-            const wrapper = document.getElementById('testimonial-wrapper');
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // --- Testimonial Slider Logic ---
+            const scroller = document.getElementById('testimonial-scroller');
             const prevBtn = document.getElementById('prev-testimonial');
             const nextBtn = document.getElementById('next-testimonial');
-            let currentIndex = 0;
-            const items = wrapper.children;
-            const totalItems = items.length;
-
-            function updateSlider() {
-                wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }
             
-            if (prevBtn && nextBtn) {
-                prevBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-                    updateSlider();
+            if (scroller && prevBtn && nextBtn) {
+                 prevBtn.addEventListener('click', () => {
+                    const slideWidth = scroller.querySelector('.testimonial-slide').clientWidth;
+                    scroller.scrollBy({ left: -slideWidth, behavior: 'smooth' });
                 });
 
                 nextBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex + 1) % totalItems;
-                    updateSlider();
+                    const slideWidth = scroller.querySelector('.testimonial-slide').clientWidth;
+                    scroller.scrollBy({ left: slideWidth, behavior: 'smooth' });
                 });
             }
         }
@@ -609,13 +614,11 @@
         const subject = encodeURIComponent("Project Inquiry from " + name);
         const body = encodeURIComponent(message + "\n\nFrom: " + name);
         
-        // Detect mobile device to use the mailto: link, which opens the default email app
         const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
         
         if (isMobile) {
             window.location.href = `mailto:karnishhvjs10b@gmail.com?subject=${subject}&body=${body}`;
         } else {
-            // For desktops, open the Gmail web interface
             const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
             window.open(gmailUrl, '_blank');
         }
