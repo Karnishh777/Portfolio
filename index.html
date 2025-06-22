@@ -21,7 +21,7 @@
     }
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #020617;
+      background-color: #0A0A0A;
       color: #e2e8f0;
       overflow-x: hidden;
     }
@@ -100,13 +100,13 @@
       100% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.2), 0 0 80px rgba(192, 38, 211, 0.1); }
     }
     .hero-bg {
-        background: radial-gradient(ellipse at 50% 50%, rgba(13, 20, 48, 0.9) 0%, rgba(2, 6, 23, 1) 70%);
+        background: radial-gradient(ellipse at 50% 50%, rgba(13, 20, 48, 0.9) 0%, rgba(2, 6, 23, 1) 85%);
         animation: hero-glow 10s infinite ease-in-out;
     }
     .glassmorphism {
         background: rgba(15, 23, 42, 0.3);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .scroll-animate {
@@ -137,7 +137,6 @@
         transition: all 0.3s ease;
     }
     .form-input:focus {
-        background-color: rgba(15, 23, 42, 0.8);
         border-color: #06b6d4;
         box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
     }
@@ -170,7 +169,7 @@
       transform: translateY(-50%);
       width: 44px;
       height: 44px;
-      display: none; /* Hidden by default, shown on desktop */
+      display: none; /* Hidden by default */
       align-items: center;
       justify-content: center;
       color: #94a3b8; /* Lighter color for visibility */
@@ -205,11 +204,41 @@
     }
     .testimonial-slider-container::before {
         left: 0;
-        background: linear-gradient(to right, #020617, transparent);
+        background: linear-gradient(to right, #0A0A0A, transparent);
     }
     .testimonial-slider-container::after {
         right: 0;
-        background: linear-gradient(to left, #020617, transparent);
+        background: linear-gradient(to left, #0A0A0A, transparent);
+    }
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        z-index: 9990;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    .modal-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .modal-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.95);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 9991;
+        pointer-events: none;
+    }
+    .modal-overlay.visible .modal-content {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        pointer-events: auto;
     }
   </style>
 </head>
@@ -240,6 +269,7 @@
           <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">About</a>
           <a href="#showcase" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Showcase</a>
           <a href="#services" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Services</a>
+          <a href="#pricing" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Pricing</a>
           <a href="#process" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Process</a>
           <a href="#testimonials" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Testimonials</a>
         </div>
@@ -261,6 +291,7 @@
           <a href="#about" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">About</a>
           <a href="#showcase" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Showcase</a>
           <a href="#services" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Services</a>
+          <a href="#pricing" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Pricing</a>
           <a href="#process" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Process</a>
           <a href="#testimonials" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Testimonials</a>
           <a href="#contact" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Contact</a>
@@ -465,14 +496,64 @@
         </div>
       </section>
 
+      <!-- PRICING SECTION -->
+      <section id="pricing" class="py-20 md:py-32 bg-slate-900/50">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-16 scroll-animate">Find the Perfect Package</h2>
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Basic Package -->
+                <div class="glassmorphism p-8 rounded-2xl scroll-animate flex flex-col" style="transition-delay: 100ms;">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Basic Edit</h3>
+                    <p class="text-5xl font-bold mb-4">₹799 <span class="text-lg font-normal text-slate-400">/ reel</span></p>
+                    <ul class="text-left space-y-2 text-slate-300 mb-8">
+                        <li>✓ Standard Cuts & Transitions</li>
+                        <li>✓ Royalty-Free Music</li>
+                        <li>✓ 2 Day Delivery</li>
+                    </ul>
+                    <button onclick="promptForBooking('Basic Edit Package')" class="mt-auto w-full py-3 bg-cyan-600/50 text-cyan-300 font-bold rounded-full hover:bg-cyan-600/80 hover:text-white transition-all duration-300 hover-target">
+                      Book Now
+                    </button>
+                </div>
+                <!-- Advanced Package -->
+                <div class="glassmorphism p-8 rounded-2xl border-2 border-cyan-500 relative overflow-hidden scroll-animate flex flex-col" style="transition-delay: 200ms;">
+                    <span class="absolute top-0 right-0 bg-cyan-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</span>
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Advanced Edit</h3>
+                    <p class="text-5xl font-bold mb-4">₹999 <span class="text-lg font-normal text-slate-400">/ reel</span></p>
+                    <ul class="text-left space-y-2 text-slate-300 mb-8">
+                        <li>✓ Everything in Basic</li>
+                        <li>✓ Advanced AI Effects</li>
+                        <li>✓ Custom Sound Design</li>
+                        <li>✓ Cinematic Color Grade</li>
+                    </ul>
+                    <button onclick="promptForBooking('Advanced Edit Package')" class="mt-auto w-full py-3 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
+                      Book Now
+                    </button>
+                </div>
+                <!-- Creator Pack -->
+                <div class="glassmorphism p-8 rounded-2xl scroll-animate flex flex-col" style="transition-delay: 300ms;">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Creator Pack</h3>
+                    <p class="text-5xl font-bold mb-4">₹5999 <span class="text-lg font-normal text-slate-400">/ month</span></p>
+                    <ul class="text-left space-y-2 text-slate-300 mb-8">
+                        <li>✓ 8 Advanced Reels</li>
+                        <li>✓ Priority Support</li>
+                        <li>✓ Strategy Consultation</li>
+                    </ul>
+                    <button onclick="promptForBooking('Monthly Creator Pack')" class="mt-auto w-full py-3 bg-cyan-600/50 text-cyan-300 font-bold rounded-full hover:bg-cyan-600/80 hover:text-white transition-all duration-300 hover-target">
+                      Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+      </section>
+
       <!-- CONTACT SECTION -->
-      <section id="contact" class="py-20 md:py-32 bg-slate-900/50">
+      <section id="contact" class="py-20 md:py-32">
         <div class="container mx-auto px-6 text-center">
           <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Let's Create Something<br>Extraordinary.</h2>
           <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-12 scroll-animate" style="transition-delay: 200ms;">
             Have a project in mind? I'd love to hear about it. Reach out to discuss your vision.
           </p>
-          <form onsubmit="return redirectToGmail();" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
+          <form onsubmit="return redirectToGmail(this);" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
             <div class="mb-4">
               <label for="userName" class="block text-slate-400 mb-2">Your Name</label>
               <input type="text" id="userName" placeholder="What should I call you?" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
@@ -489,6 +570,25 @@
       </section>
 
     </main>
+
+    <!-- BOOKING MODAL -->
+    <div id="booking-modal" class="modal-overlay">
+      <div class="modal-content w-full max-w-md glassmorphism rounded-2xl p-8">
+          <button id="close-booking-modal-btn" class="absolute top-4 right-6 text-slate-400 text-3xl hover:text-white transition-colors hover-target">&times;</button>
+          <h2 class="text-2xl font-bold text-white mb-2">Booking Inquiry</h2>
+          <p class="text-slate-400 mb-6">Just one more step. Please enter your name to proceed.</p>
+          <form id="booking-form">
+            <div class="mb-4">
+              <label for="bookingUserName" class="block text-slate-400 mb-2">Your Name</label>
+              <input type="text" id="bookingUserName" placeholder="e.g., John Doe" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
+            </div>
+            <button type="submit" class="w-full py-3 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
+              Proceed to Email
+            </button>
+          </form>
+      </div>
+    </div>
+
 
     <!-- FOOTER -->
     <footer class="py-8 text-center">
@@ -507,10 +607,7 @@
         const mobileBtn = document.getElementById('mobile-btn');
 
         function initializeSite(isDesktop) {
-            // Fade out selector
             if (deviceSelector) deviceSelector.classList.add('fade-out');
-            
-            // Show content
             if (mainContentWrapper) mainContentWrapper.classList.remove('content-hidden');
 
             if (isDesktop) {
@@ -525,7 +622,6 @@
             desktopBtn.addEventListener('click', () => initializeSite(true));
             mobileBtn.addEventListener('click', () => initializeSite(false));
         } else {
-             // Fallback for safety, if selector is missing
              const isDesktop = !/Mobi|Android|iPhone/i.test(navigator.userAgent);
              initializeSite(isDesktop);
         }
@@ -552,7 +648,6 @@
         }
 
         function initializeCommonFeatures() {
-            // Sticky Header on Scroll
             const header = document.getElementById('header');
             if (header) {
                 window.addEventListener('scroll', () => {
@@ -560,7 +655,6 @@
                 });
             }
 
-            // Scroll Animation Logic
             const animatedElements = document.querySelectorAll('.scroll-animate');
             if (animatedElements.length > 0) {
                 const observer = new IntersectionObserver((entries) => {
@@ -571,7 +665,6 @@
                 animatedElements.forEach(el => observer.observe(el));
             }
 
-            // Mobile Menu Logic
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
@@ -588,7 +681,6 @@
                 });
             }
 
-            // --- Testimonial Slider Logic ---
             const scroller = document.getElementById('testimonial-scroller');
             const prevBtn = document.getElementById('prev-testimonial');
             const nextBtn = document.getElementById('next-testimonial');
@@ -604,13 +696,55 @@
                     scroller.scrollBy({ left: slideWidth, behavior: 'smooth' });
                 });
             }
+
+            // Booking Modal Logic
+            const bookingModal = document.getElementById('booking-modal');
+            const closeBookingModalBtn = document.getElementById('close-booking-modal-btn');
+            const bookingForm = document.getElementById('booking-form');
+
+            if (bookingModal && closeBookingModalBtn && bookingForm) {
+                 closeBookingModalBtn.addEventListener('click', () => bookingModal.classList.remove('visible'));
+                 bookingModal.addEventListener('click', (e) => {
+                    if (e.target === bookingModal) bookingModal.classList.remove('visible');
+                 });
+                 bookingForm.addEventListener('submit', (e) => {
+                     e.preventDefault();
+                     const name = document.getElementById('bookingUserName').value;
+                     const packageName = bookingForm.dataset.packageName;
+                     sendBookingEmail(name, packageName);
+                     bookingModal.classList.remove('visible');
+                 });
+            }
         }
     });
 
-    // --- Contact Form ---
-    function redirectToGmail() {
-        const name = document.getElementById('userName').value;
-        const message = document.getElementById('userMessage').value;
+    function promptForBooking(packageName) {
+        const bookingModal = document.getElementById('booking-modal');
+        const bookingForm = document.getElementById('booking-form');
+        if (bookingModal && bookingForm) {
+            bookingForm.dataset.packageName = packageName;
+            bookingModal.classList.add('visible');
+            document.getElementById('bookingUserName').focus();
+        }
+    }
+
+    function sendBookingEmail(name, packageName) {
+        const subject = encodeURIComponent(`Project Inquiry: ${name} - ${packageName}`);
+        const body = encodeURIComponent(`Hi Karnishh,\n\nI'm interested in learning more about your ${packageName}.\n\nPlease let me know the next steps.\n\nThanks,\n${name}`);
+        
+        const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            window.location.href = `mailto:karnishhvjs10b@gmail.com?subject=${subject}&body=${body}`;
+        } else {
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
+            window.open(gmailUrl, '_blank');
+        }
+    }
+
+    function redirectToGmail(form) {
+        const name = form.querySelector('#userName').value;
+        const message = form.querySelector('#userMessage').value;
         const subject = encodeURIComponent("Project Inquiry from " + name);
         const body = encodeURIComponent(message + "\n\nFrom: " + name);
         
