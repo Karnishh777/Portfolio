@@ -125,10 +125,10 @@
     .reel-item:hover .reel-overlay {
         opacity: 1;
     }
-    .reel-item .reel-iframe {
+    .reel-item img {
         transition: transform 0.4s ease;
     }
-    .reel-item:hover .reel-iframe {
+    .reel-item:hover img {
         transform: scale(1.05);
     }
     .form-input {
@@ -210,36 +210,6 @@
         right: 0;
         background: linear-gradient(to left, #0A0A0A, transparent);
     }
-    /* Modal Styles */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background-color: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
-        z-index: 9990;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-    }
-    .modal-overlay.visible {
-        opacity: 1;
-        pointer-events: auto;
-    }
-    .modal-content {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.95);
-        opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 9991;
-        pointer-events: none;
-    }
-    .modal-overlay.visible .modal-content {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-        pointer-events: auto;
-    }
   </style>
 </head>
 <body class="bg-slate-900">
@@ -269,7 +239,6 @@
           <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">About</a>
           <a href="#showcase" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Showcase</a>
           <a href="#services" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Services</a>
-          <a href="#pricing" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Pricing</a>
           <a href="#process" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Process</a>
           <a href="#testimonials" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target">Testimonials</a>
         </div>
@@ -291,7 +260,6 @@
           <a href="#about" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">About</a>
           <a href="#showcase" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Showcase</a>
           <a href="#services" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Services</a>
-          <a href="#pricing" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Pricing</a>
           <a href="#process" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Process</a>
           <a href="#testimonials" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Testimonials</a>
           <a href="#contact" class="text-3xl text-slate-300 hover:text-cyan-400 transition-colors duration-300 hover-target mobile-menu-link">Contact</a>
@@ -351,33 +319,41 @@
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <!-- Reel Item 1 -->
-              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 100ms;">
-                  <iframe class="reel-iframe w-full h-full pointer-events-none" src="https://www.instagram.com/reel/DJEmc-EyI2Z/embed" allowfullscreen></iframe>
-                  <a href="https://www.instagram.com/reel/DJEmc-EyI2Z/" target="_blank" rel="noopener noreferrer" class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                      <h3 class="text-white text-2xl font-bold text-center">Cinematic Edit</h3>
-                  </a>
-              </div>
+              <a href="https://www.instagram.com/reel/DJEmc-EyI2Z/" target="_blank" rel="noopener noreferrer" class="reel-item group block relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate hover-target" style="transition-delay: 100ms;">
+                  <img src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=800&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x711/0A0A0A/FFFFFF?text=Cinematic';" alt="Cinematic Edit Thumbnail" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div class="absolute bottom-0 left-0 p-4">
+                      <h3 class="text-white text-xl font-bold">Cinematic Edit</h3>
+                      <p class="text-xs text-cyan-400 font-semibold">Brand Film</p>
+                  </div>
+              </a>
               <!-- Reel Item 2 -->
-              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 200ms;">
-                  <iframe class="reel-iframe w-full h-full pointer-events-none" src="https://www.instagram.com/reel/DIx1ZkUSza4/embed" allowfullscreen></iframe>
-                  <a href="https://www.instagram.com/reel/DIx1ZkUSza4/" target="_blank" rel="noopener noreferrer" class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                      <h3 class="text-white text-2xl font-bold text-center">Sports Showcase</h3>
-                  </a>
-              </div>
+              <a href="https://www.instagram.com/reel/DIx1ZkUSza4/" target="_blank" rel="noopener noreferrer" class="reel-item group block relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate hover-target" style="transition-delay: 200ms;">
+                  <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=800&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x711/0A0A0A/FFFFFF?text=Sports';" alt="Sports Showcase Thumbnail" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div class="absolute bottom-0 left-0 p-4">
+                      <h3 class="text-white text-xl font-bold">Sports Showcase</h3>
+                      <p class="text-xs text-cyan-400 font-semibold">Social Reel</p>
+                  </div>
+              </a>
               <!-- Reel Item 3 -->
-              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 300ms;">
-                  <iframe class="reel-iframe w-full h-full pointer-events-none" src="https://www.instagram.com/reel/DKU0eNxS6Gc/embed" allowfullscreen></iframe>
-                  <a href="https://www.instagram.com/reel/DKU0eNxS6Gc/" target="_blank" rel="noopener noreferrer" class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                      <h3 class="text-white text-2xl font-bold text-center">AI Knowledge</h3>
-                  </a>
-              </div>
+              <a href="https://www.instagram.com/reel/DKU0eNxS6Gc/" target="_blank" rel="noopener noreferrer" class="reel-item group block relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate hover-target" style="transition-delay: 300ms;">
+                  <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x711/0A0A0A/FFFFFF?text=AI';" alt="AI Knowledge Thumbnail" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div class="absolute bottom-0 left-0 p-4">
+                      <h3 class="text-white text-xl font-bold">AI Knowledge</h3>
+                      <p class="text-xs text-cyan-400 font-semibold">Educational Content</p>
+                  </div>
+              </a>
               <!-- Reel Item 4 -->
-              <div class="reel-item group relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate" style="transition-delay: 400ms;">
-                  <iframe class="reel-iframe w-full h-full pointer-events-none" src="https://www.instagram.com/reel/DJJ9iFzysUl/embed" allowfullscreen></iframe>
-                  <a href="https://www.instagram.com/reel/DJJ9iFzysUl/" target="_blank" rel="noopener noreferrer" class="reel-overlay absolute inset-0 bg-black/70 flex items-center justify-center p-4 hover-target">
-                      <h3 class="text-white text-2xl font-bold text-center">Dynamic Montage</h3>
-                  </a>
-              </div>
+              <a href="https://www.instagram.com/reel/DJJ9iFzysUl/" target="_blank" rel="noopener noreferrer" class="reel-item group block relative aspect-[9/16] overflow-hidden rounded-xl scroll-animate hover-target" style="transition-delay: 400ms;">
+                  <img src="https://images.unsplash.com/photo-1549488344-c087a054b512?q=80&w=800&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x711/0A0A0A/FFFFFF?text=Montage';" alt="Dynamic Montage Thumbnail" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div class="absolute bottom-0 left-0 p-4">
+                      <h3 class="text-white text-xl font-bold">Dynamic Montage</h3>
+                      <p class="text-xs text-cyan-400 font-semibold">Event Recap</p>
+                  </div>
+              </a>
           </div>
         </div>
       </section>
@@ -391,17 +367,26 @@
               </p>
               <div class="grid md:grid-cols-3 gap-8">
                   <!-- Service 1 -->
-                  <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 100ms;">
+                  <div class="glassmorphism p-8 rounded-2xl scroll-animate text-left" style="transition-delay: 100ms;">
+                      <svg class="w-12 h-12 mb-4 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9A2.25 2.25 0 0013.5 5.25h-9A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75z" />
+                      </svg>
                       <h3 class="text-2xl font-bold text-cyan-400 mb-4">Reel & Shorts Editing</h3>
                       <p class="text-slate-400">Fast-paced, high-impact editing for social media platforms like Instagram, TikTok, and YouTube Shorts, optimized for maximum engagement and virality.</p>
                   </div>
                   <!-- Service 2 -->
-                  <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 200ms;">
+                  <div class="glassmorphism p-8 rounded-2xl scroll-animate text-left" style="transition-delay: 200ms;">
+                       <svg class="w-12 h-12 mb-4 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.998 15.998 0 011.622-3.385m5.043 1.622a15.998 15.998 0 001.622-3.385m3.388 1.62a15.998 15.998 0 00-1.622-3.385m-5.043 5.043a15.998 15.998 0 01-3.388-1.622m-1.622 5.043a15.998 15.998 0 013.388-1.622m0 0a15.998 15.998 0 013.388 1.622m-5.043-5.043a15.998 15.998 0 00-3.388-1.622m-1.622-5.043a15.998 15.998 0 001.622 3.385m-3.388-1.62a15.998 15.998 0 00-1.622 3.385m1.622-5.043L3.34 6.11m11.56 11.56l-5.043-5.043" />
+                      </svg>
                       <h3 class="text-2xl font-bold text-cyan-400 mb-4">Cinematic Color Grading</h3>
                       <p class="text-slate-400">Professional color correction and grading to establish a mood, enhance the visual narrative, and give your footage a high-end, cinematic look.</p>
                   </div>
                   <!-- Service 3 -->
-                  <div class="glassmorphism p-8 rounded-2xl scroll-animate" style="transition-delay: 300ms;">
+                  <div class="glassmorphism p-8 rounded-2xl scroll-animate text-left" style="transition-delay: 300ms;">
+                      <svg class="w-12 h-12 mb-4 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h6.375a.75.75 0 01.75.75v3.375a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75zm0 9.375h6.375a.75.75 0 01.75.75v3.375a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75V16.5a.75.75 0 01.75-.75z" />
+                      </svg>
                       <h3 class="text-2xl font-bold text-cyan-400 mb-4">Brand & Corporate Video</h3>
                       <p class="text-slate-400">Polished editing for brand stories, promotional videos, and corporate content that communicates your message clearly and professionally.</p>
                   </div>
@@ -409,58 +394,8 @@
           </div>
       </section>
       
-      <!-- PRICING SECTION -->
-      <section id="pricing" class="py-20 md:py-32 bg-slate-900/50">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold text-white mb-16 scroll-animate">Find the Perfect Package</h2>
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Basic Package -->
-                <div class="glassmorphism p-8 rounded-2xl scroll-animate flex flex-col" style="transition-delay: 100ms;">
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Basic Edit</h3>
-                    <p class="text-5xl font-bold mb-4">₹799 <span class="text-lg font-normal text-slate-400">/ reel</span></p>
-                    <ul class="text-left space-y-2 text-slate-300 mb-8">
-                        <li>✓ Standard Cuts & Transitions</li>
-                        <li>✓ Royalty-Free Music</li>
-                        <li>✓ 2 Day Delivery</li>
-                    </ul>
-                    <button onclick="promptForBooking('Basic Edit Package')" class="mt-auto w-full py-3 bg-cyan-600/50 text-cyan-300 font-bold rounded-full hover:bg-cyan-600/80 hover:text-white transition-all duration-300 hover-target">
-                      Book Now
-                    </button>
-                </div>
-                <!-- Advanced Package -->
-                <div class="glassmorphism p-8 rounded-2xl border-2 border-cyan-500 relative overflow-hidden scroll-animate flex flex-col" style="transition-delay: 200ms;">
-                    <span class="absolute top-0 right-0 bg-cyan-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</span>
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Advanced Edit</h3>
-                    <p class="text-5xl font-bold mb-4">₹999 <span class="text-lg font-normal text-slate-400">/ reel</span></p>
-                    <ul class="text-left space-y-2 text-slate-300 mb-8">
-                        <li>✓ Everything in Basic</li>
-                        <li>✓ Advanced AI Effects</li>
-                        <li>✓ Custom Sound Design</li>
-                        <li>✓ Cinematic Color Grade</li>
-                    </ul>
-                    <button onclick="promptForBooking('Advanced Edit Package')" class="mt-auto w-full py-3 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
-                      Book Now
-                    </button>
-                </div>
-                <!-- Creator Pack -->
-                <div class="glassmorphism p-8 rounded-2xl scroll-animate flex flex-col" style="transition-delay: 300ms;">
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Creator Pack</h3>
-                    <p class="text-5xl font-bold mb-4">₹5999 <span class="text-lg font-normal text-slate-400">/ month</span></p>
-                    <ul class="text-left space-y-2 text-slate-300 mb-8">
-                        <li>✓ 8 Advanced Reels</li>
-                        <li>✓ Priority Support</li>
-                        <li>✓ Strategy Consultation</li>
-                    </ul>
-                    <button onclick="promptForBooking('Monthly Creator Pack')" class="mt-auto w-full py-3 bg-cyan-600/50 text-cyan-300 font-bold rounded-full hover:bg-cyan-600/80 hover:text-white transition-all duration-300 hover-target">
-                      Book Now
-                    </button>
-                </div>
-            </div>
-        </div>
-      </section>
-
       <!-- THE PROCESS SECTION -->
-      <section id="process" class="py-20 md:py-32">
+      <section id="process" class="py-20 md:py-32 bg-slate-900/50">
           <div class="container mx-auto px-6 text-center">
               <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">My Creative Process</h2>
               <p class="text-slate-400 max-w-3xl mx-auto text-lg mb-16 scroll-animate" style="transition-delay: 200ms;">
@@ -498,62 +433,66 @@
       </section>
 
       <!-- TESTIMONIALS SECTION -->
-      <section id="testimonials" class="py-20 md:py-32 bg-slate-900/50">
+      <section id="testimonials" class="py-20 md:py-32">
         <div class="container mx-auto px-6">
-          <h2 class="text-4xl md:text-5xl font-bold text-white mb-16 text-center scroll-animate">What My Clients Say</h2>
-          <div class="testimonial-slider-container max-w-3xl mx-auto relative scroll-animate">
-            <div id="testimonial-scroller" class="testimonial-scroller">
-                <!-- Testimonial 1 -->
-                <div class="testimonial-slide">
-                    <div class="glassmorphism p-8 rounded-2xl text-center">
-                        <p class="text-slate-300 text-lg italic mb-6">"Karnishh is a magician. He took our raw footage and turned it into something truly cinematic that exceeded all our expectations."</p>
-                        <p class="font-bold text-cyan-400">John Doe</p>
-                        <p class="text-slate-500">Brand Video Client</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-16 text-center scroll-animate">What My Clients Say</h2>
+            <div class="testimonial-slider-container max-w-3xl mx-auto relative scroll-animate">
+                <div id="testimonial-scroller" class="testimonial-scroller">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-slide">
+                        <div class="glassmorphism p-8 rounded-2xl text-center">
+                            <img src="https://placehold.co/80x80/0A0A0A/FFFFFF?text=JD" alt="John Doe" class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-cyan-400">
+                            <p class="text-slate-300 text-lg italic mb-6">"Karnishh is a magician. He took our raw footage and turned it into something truly cinematic that exceeded all our expectations."</p>
+                            <p class="font-bold text-cyan-400">John Doe</p>
+                            <p class="text-slate-500">Brand Video Client</p>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-slide">
+                        <div class="glassmorphism p-8 rounded-2xl text-center">
+                            <img src="https://placehold.co/80x80/0A0A0A/FFFFFF?text=JS" alt="Jane Smith" class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-cyan-400">
+                            <p class="text-slate-300 text-lg italic mb-6">"The turnaround was incredibly fast, and the quality was top-notch. Our social media engagement has skyrocketed since we started working with him."</p>
+                            <p class="font-bold text-cyan-400">Jane Smith</p>
+                            <p class="text-slate-500">Social Media Manager</p>
+                        </div>
+                    </div>
+                    <!-- Testimonial 3 -->
+                     <div class="testimonial-slide">
+                        <div class="glassmorphism p-8 rounded-2xl text-center">
+                            <img src="https://placehold.co/80x80/0A0A0A/FFFFFF?text=SL" alt="Samuel Lee" class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-cyan-400">
+                            <p class="text-slate-300 text-lg italic mb-6">"An absolute professional. Karnishh understands storytelling on a deep level. Highly recommend for any project that needs a creative touch."</p>
+                            <p class="font-bold text-cyan-400">Samuel Lee</p>
+                            <p class="text-slate-500">Independent Filmmaker</p>
+                        </div>
+                    </div>
+                     <!-- Testimonial 4 -->
+                     <div class="testimonial-slide">
+                        <div class="glassmorphism p-8 rounded-2xl text-center">
+                            <img src="https://placehold.co/80x80/0A0A0A/FFFFFF?text=PS" alt="Priya Sharma" class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-cyan-400">
+                            <p class="text-slate-300 text-lg italic mb-6">"His color grading skills are phenomenal. He brought a mood and feeling to our project that we didn't even know was possible."</p>
+                            <p class="font-bold text-cyan-400">Priya Sharma</p>
+                            <p class="text-slate-500">Corporate Comms</p>
+                        </div>
                     </div>
                 </div>
-                <!-- Testimonial 2 -->
-                <div class="testimonial-slide">
-                    <div class="glassmorphism p-8 rounded-2xl text-center">
-                        <p class="text-slate-300 text-lg italic mb-6">"The turnaround was incredibly fast, and the quality was top-notch. Our social media engagement has skyrocketed since we started working with him."</p>
-                        <p class="font-bold text-cyan-400">Jane Smith</p>
-                        <p class="text-slate-500">Social Media Manager</p>
-                    </div>
-                </div>
-                <!-- Testimonial 3 -->
-                 <div class="testimonial-slide">
-                    <div class="glassmorphism p-8 rounded-2xl text-center">
-                        <p class="text-slate-300 text-lg italic mb-6">"An absolute professional. Karnishh understands storytelling on a deep level. Highly recommend for any project that needs a creative touch."</p>
-                        <p class="font-bold text-cyan-400">Samuel Lee</p>
-                        <p class="text-slate-500">Independent Filmmaker</p>
-                    </div>
-                </div>
-                 <!-- Testimonial 4 -->
-                 <div class="testimonial-slide">
-                    <div class="glassmorphism p-8 rounded-2xl text-center">
-                        <p class="text-slate-300 text-lg italic mb-6">"His color grading skills are phenomenal. He brought a mood and feeling to our project that we didn't even know was possible."</p>
-                        <p class="font-bold text-cyan-400">Priya Sharma</p>
-                        <p class="text-slate-500">Corporate Comms</p>
-                    </div>
-                </div>
+                <button class="slider-nav prev hover-target" id="prev-testimonial">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button class="slider-nav next hover-target" id="next-testimonial">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
             </div>
-            <button class="slider-nav prev hover-target" id="prev-testimonial">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-            </button>
-            <button class="slider-nav next hover-target" id="next-testimonial">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-            </button>
-          </div>
         </div>
       </section>
 
       <!-- CONTACT SECTION -->
-      <section id="contact" class="py-20 md:py-32">
+      <section id="contact" class="py-20 md:py-32 bg-slate-900/50">
         <div class="container mx-auto px-6 text-center">
           <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 scroll-animate">Let's Create Something<br>Extraordinary.</h2>
           <p class="text-slate-400 max-w-2xl mx-auto text-lg mb-12 scroll-animate" style="transition-delay: 200ms;">
             Have a project in mind? I'd love to hear about it. Reach out to discuss your vision.
           </p>
-          <form onsubmit="return redirectToGmail(this);" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
+          <form onsubmit="return redirectToGmail();" class="max-w-xl mx-auto text-left scroll-animate" style="transition-delay: 300ms;">
             <div class="mb-4">
               <label for="userName" class="block text-slate-400 mb-2">Your Name</label>
               <input type="text" id="userName" placeholder="What should I call you?" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
@@ -570,25 +509,6 @@
       </section>
 
     </main>
-
-    <!-- BOOKING MODAL -->
-    <div id="booking-modal" class="modal-overlay">
-      <div class="modal-content w-full max-w-md glassmorphism rounded-2xl p-8">
-          <button id="close-booking-modal-btn" class="absolute top-4 right-6 text-slate-400 text-3xl hover:text-white transition-colors hover-target">&times;</button>
-          <h2 class="text-2xl font-bold text-white mb-2">Booking Inquiry</h2>
-          <p class="text-slate-400 mb-6">Just one more step. Please enter your name to proceed.</p>
-          <form id="booking-form">
-            <div class="mb-4">
-              <label for="bookingUserName" class="block text-slate-400 mb-2">Your Name</label>
-              <input type="text" id="bookingUserName" placeholder="e.g., John Doe" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
-            </div>
-            <button type="submit" class="w-full py-3 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
-              Proceed to Email
-            </button>
-          </form>
-      </div>
-    </div>
-
 
     <!-- FOOTER -->
     <footer class="py-8 text-center">
@@ -681,6 +601,7 @@
                 });
             }
 
+            // --- Testimonial Slider Logic ---
             const scroller = document.getElementById('testimonial-scroller');
             const prevBtn = document.getElementById('prev-testimonial');
             const nextBtn = document.getElementById('next-testimonial');
@@ -696,55 +617,13 @@
                     scroller.scrollBy({ left: slideWidth, behavior: 'smooth' });
                 });
             }
-
-            // Booking Modal Logic
-            const bookingModal = document.getElementById('booking-modal');
-            const closeBookingModalBtn = document.getElementById('close-booking-modal-btn');
-            const bookingForm = document.getElementById('booking-form');
-
-            if (bookingModal && closeBookingModalBtn && bookingForm) {
-                 closeBookingModalBtn.addEventListener('click', () => bookingModal.classList.remove('visible'));
-                 bookingModal.addEventListener('click', (e) => {
-                    if (e.target === bookingModal) bookingModal.classList.remove('visible');
-                 });
-                 bookingForm.addEventListener('submit', (e) => {
-                     e.preventDefault();
-                     const name = document.getElementById('bookingUserName').value;
-                     const packageName = bookingForm.dataset.packageName;
-                     sendBookingEmail(name, packageName);
-                     bookingModal.classList.remove('visible');
-                 });
-            }
         }
     });
 
-    function promptForBooking(packageName) {
-        const bookingModal = document.getElementById('booking-modal');
-        const bookingForm = document.getElementById('booking-form');
-        if (bookingModal && bookingForm) {
-            bookingForm.dataset.packageName = packageName;
-            bookingModal.classList.add('visible');
-            document.getElementById('bookingUserName').focus();
-        }
-    }
-
-    function sendBookingEmail(name, packageName) {
-        const subject = encodeURIComponent(`Project Inquiry: ${name} - ${packageName}`);
-        const body = encodeURIComponent(`Hi Karnishh,\n\nI'm interested in learning more about your ${packageName}.\n\nPlease let me know the next steps.\n\nThanks,\n${name}`);
-        
-        const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-        
-        if (isMobile) {
-            window.location.href = `mailto:karnishhvjs10b@gmail.com?subject=${subject}&body=${body}`;
-        } else {
-            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=karnishhvjs10b@gmail.com&su=${subject}&body=${body}`;
-            window.open(gmailUrl, '_blank');
-        }
-    }
-
-    function redirectToGmail(form) {
-        const name = form.querySelector('#userName').value;
-        const message = form.querySelector('#userMessage').value;
+    // --- Contact Form ---
+    function redirectToGmail() {
+        const name = document.getElementById('userName').value;
+        const message = document.getElementById('userMessage').value;
         const subject = encodeURIComponent("Project Inquiry from " + name);
         const body = encodeURIComponent(message + "\n\nFrom: " + name);
         
