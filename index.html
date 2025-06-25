@@ -425,7 +425,7 @@
               </div>
           </div>
       </section>
-      
+
       <!-- PRICING SECTION -->
       <section id="pricing" class="py-20 md:py-32 bg-slate-900/50">
         <div class="container mx-auto px-6 text-center">
@@ -475,7 +475,7 @@
             </div>
         </div>
       </section>
-
+      
       <!-- THE PROCESS SECTION -->
       <section id="process" class="py-20 md:py-32">
           <div class="container mx-auto px-6 text-center">
@@ -575,6 +575,10 @@
               <label for="userName" class="block text-slate-400 mb-2">Your Name</label>
               <input type="text" id="userName" placeholder="What should I call you?" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
             </div>
+            <div class="mb-4">
+              <label for="userPhone" class="block text-slate-400 mb-2">Contact / WhatsApp Number</label>
+              <input type="tel" id="userPhone" placeholder="So I can reach you back" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
+            </div>
             <div class="mb-6">
               <label for="userMessage" class="block text-slate-400 mb-2">Your Message</label>
               <textarea id="userMessage" placeholder="Tell me about your project..." required rows="5" class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target"></textarea>
@@ -593,11 +597,15 @@
       <div class="modal-content w-full max-w-md glassmorphism rounded-2xl p-8">
           <button id="close-booking-modal-btn" class="absolute top-4 right-6 text-slate-400 text-3xl hover:text-white transition-colors hover-target">&times;</button>
           <h2 class="text-2xl font-bold text-white mb-2">Booking Inquiry</h2>
-          <p class="text-slate-400 mb-6">Just one more step. Please enter your name to proceed.</p>
+          <p class="text-slate-400 mb-6">Just one more step. Please enter your name and contact number to proceed.</p>
           <form id="booking-form">
             <div class="mb-4">
               <label for="bookingUserName" class="block text-slate-400 mb-2">Your Name</label>
               <input type="text" id="bookingUserName" placeholder="e.g., John Doe" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
+            </div>
+            <div class="mb-6">
+              <label for="bookingUserPhone" class="block text-slate-400 mb-2">Contact / WhatsApp Number</label>
+              <input type="tel" id="bookingUserPhone" placeholder="So I can reach you back" required class="form-input w-full p-4 rounded-lg text-white focus:outline-none hover-target">
             </div>
             <button type="submit" class="w-full py-3 bg-cyan-500 text-slate-900 font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 hover-target">
               Proceed to Email
@@ -714,7 +722,6 @@
                 });
             }
 
-            // Booking Modal Logic
             const bookingModal = document.getElementById('booking-modal');
             const closeBookingModalBtn = document.getElementById('close-booking-modal-btn');
             const bookingForm = document.getElementById('booking-form');
@@ -727,8 +734,9 @@
                  bookingForm.addEventListener('submit', (e) => {
                      e.preventDefault();
                      const name = document.getElementById('bookingUserName').value;
+                     const phone = document.getElementById('bookingUserPhone').value;
                      const packageName = bookingForm.dataset.packageName;
-                     sendBookingEmail(name, packageName);
+                     sendBookingEmail(name, phone, packageName);
                      bookingModal.classList.remove('visible');
                  });
             }
@@ -745,9 +753,9 @@
         }
     }
 
-    function sendBookingEmail(name, packageName) {
+    function sendBookingEmail(name, phone, packageName) {
         const subject = encodeURIComponent(`Project Inquiry: ${name} - ${packageName}`);
-        const body = encodeURIComponent(`Hi Karnishh,\n\nI'm interested in learning more about your ${packageName}.\n\nPlease let me know the next steps.\n\nThanks,\n${name}`);
+        const body = encodeURIComponent(`Hi Karnishh,\n\nI'm interested in learning more about your ${packageName}.\n\nMy contact number is: ${phone}\n\nPlease let me know the next steps.\n\nThanks,\n${name}`);
         
         const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
         
@@ -761,9 +769,10 @@
 
     function redirectToGmail(form) {
         const name = form.querySelector('#userName').value;
+        const phone = form.querySelector('#userPhone').value;
         const message = form.querySelector('#userMessage').value;
         const subject = encodeURIComponent("Project Inquiry from " + name);
-        const body = encodeURIComponent(message + "\n\nFrom: " + name);
+        const body = encodeURIComponent(`${message}\n\nFrom: ${name}\nContact: ${phone}`);
         
         const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
         
